@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { toast, Toaster } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export default function Register() {
     const { createUser, updateUserProfile, googleSignIn } = useContext(AuthContext);
@@ -11,6 +12,7 @@ export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -28,8 +30,27 @@ export default function Register() {
         createUser(email, password)
             .then(() => {
                 updateUserProfile(name, photo)
-                    .then(() => {
+                    .then(async () => {
                         toast.success("Registration successful!");
+
+                        const newUser = {
+                            name,
+                            email,
+                            photo,
+                            role: "user",
+                            createdAt: new Date(),
+                        }
+                        try{
+                            const res = await axiosSecure.post("/users", newUser);
+                            if(res.data.message){
+                                toast("User already exists in Database")
+                            }
+                        }
+                        catch(err){
+                            console.error(err);
+                            toast.error("Failed to save user to database");
+                        }
+
                         navigate("/");
                     })
                     .catch((err) => toast.error(err.message));
@@ -38,13 +59,39 @@ export default function Register() {
             .finally(() => setLoading(false));
     };
 
-    const handleGoogleLogin = () => {
-        googleSignIn()
-            .then(() => {
-                toast.success("Signed up with Google!");
-                navigate("/");
-            })
-            .catch((err) => toast.error(err.message));
+    const handleGoogleLogin = async () => {
+        try{
+            const result = await googleSignIn();
+            const user = result.user;
+            console.log(result.user)
+
+            const newUser = {
+                name: user?.displayName || "No Name",
+                email: user?.email,
+                photo: user?.photoURL,
+                role: "user",
+                createdAt: new Date(),
+            }
+
+            try{
+                const res = await axiosSecure.post("/users", newUser);
+                if(res.data.message){
+                    toast("User already exists in Database")
+                }
+                else{
+                    toast.success("Signed up with Google!");
+                }
+            }
+            catch(err){
+                console.error(err);
+                toast.error("Failed to save Google user to database");
+            }
+
+            navigate("/");
+        }
+        catch(err){
+            toast.error(err.message);
+        }
     };
 
     return (

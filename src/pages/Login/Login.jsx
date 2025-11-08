@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { toast, Toaster } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export default function Login() {
     const { signIn, googleSignIn } = useContext(AuthContext);
@@ -11,6 +12,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const axiosSecure = useAxiosSecure();
     const from = location.state?.from?.pathname || "/";
 
     const handleLogin = (e) => {
@@ -28,13 +30,38 @@ export default function Login() {
             .finally(() => setLoading(false));
     };
 
-    const handleGoogleLogin = () => {
-        googleSignIn()
-            .then(() => {
-                toast.success("Logged in with Google!");
-                navigate(from, { replace: true });
-            })
-            .catch((err) => toast.error(err.message));
+    const handleGoogleLogin = async () => {
+        try{
+            const result = await googleSignIn();
+            const user = result.user;
+
+            const newUser = {
+                name: user.displayName || "No Name",
+                email: user.email,
+                photo: user.photoURL || "",
+                role: "user",
+                createdAt: new Date(),
+            }
+
+            try{
+                const res = await axiosSecure.post("/users", newUser);
+                if(res.data.message){
+                    toast("User already exists in Database")
+                }
+                else{
+                    toast.success("Signed in with Google!");
+                }
+            }
+            catch(err){
+                console.error(err);
+                toast.error("Failed to save Google user to database");
+            }
+
+            navigate(from, {replace: true});
+        }
+        catch(err){
+            toast.error(err.message);
+        }
     };
 
     return (
