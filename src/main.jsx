@@ -9,6 +9,8 @@ import AuthProvider from './contexts/AuthProvider.jsx'
 import Register from './pages/Register/Register.jsx'
 import AllReviews from './pages/AllReviews/AllReviews.jsx'
 import PrivateRoute from './routes/PrivateRoute.jsx'
+import AddReview from './pages/AddReview/AddReview.jsx'
+import { Toaster } from 'react-hot-toast'
 
 
 const router = createBrowserRouter([
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "all-reviews",
         element: <PrivateRoute><AllReviews></AllReviews></PrivateRoute>
+      },
+      {
+        path: "add-review",
+        element: <PrivateRoute><AddReview></AddReview></PrivateRoute>
       }
     ]
   }
@@ -40,6 +46,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
       <RouterProvider router={router}></RouterProvider>
+      <Toaster position="top-center" reverseOrder={false} />
     </AuthProvider>
   </StrictMode>,
 )
