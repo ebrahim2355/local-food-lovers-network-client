@@ -73,7 +73,7 @@ export default function SingleReviewCard({ review }) {
                 />
                 <button
                     onClick={handleFavorite}
-                    className="absolute top-3 right-3 text-red-500 text-2xl"
+                    className="absolute top-3 right-3 text-red-500 text-2xl cursor-pointer"
                 >
                     {isFavorite ? <FaHeart /> : <FaRegHeart />}
                 </button>

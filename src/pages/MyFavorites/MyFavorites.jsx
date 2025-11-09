@@ -64,8 +64,10 @@ export default function MyFavorites() {
 
     return (
         <div className="max-w-6xl mx-auto p-4">
-            <h2 className="text-3xl font-bold mb-6 text-center">My Favorites</h2>
-            <div className="overflow-x-auto shadow-lg rounded-lg">
+            <h2 className="text-3xl font-bold mb-6 text-center text-orange-600">My Favorites</h2>
+
+            {/* Table for medium+ screens */}
+            <div className="hidden md:block overflow-x-auto shadow-lg rounded-lg">
                 <table className="table w-full">
                     <thead className="bg-gray-200">
                         <tr>
@@ -92,7 +94,7 @@ export default function MyFavorites() {
                                 <td>
                                     <button
                                         onClick={() => handleDelete(fav._id)}
-                                        className="bg-red-500 text-white px-3 py-1 rounded cursor-pointer hover:bg-red-600"
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                                     >
                                         Delete
                                     </button>
@@ -101,6 +103,35 @@ export default function MyFavorites() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Card layout for small screens */}
+            <div className="md:hidden flex flex-col gap-4">
+                {favorites.map((fav) => (
+                    <div key={fav._id} className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
+                        <div className="flex gap-4 p-4 items-center">
+                            <img
+                                src={fav.review?.food_image || "https://i.ibb.co/3N1sTkn/user.png"}
+                                alt={fav.review?.food_name}
+                                className="w-20 h-20 object-cover rounded-lg"
+                            />
+                            <div className="flex-1">
+                                <h3 className="text-lg font-bold">{fav.review?.food_name}</h3>
+                                <p className="text-sm text-gray-500">{fav.review?.restaurant_name}</p>
+                                <p className="text-xs text-gray-400">{new Date(fav.addedAt).toLocaleDateString()}</p>
+                            </div>
+                            <button
+                                onClick={() => handleDelete(fav._id)}
+                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                        {fav.review?.review_text && (
+                            <p className="p-4 text-gray-700 text-sm line-clamp-3">{fav.review.review_text}</p>
+                        )}
+                    </div>
+                ))}
             </div>
         </div>
     );
