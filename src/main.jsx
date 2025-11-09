@@ -13,6 +13,7 @@ import AddReview from './pages/AddReview/AddReview.jsx'
 import { Toaster } from 'react-hot-toast'
 import MyReviews from './pages/MyReviews/MyReviews.jsx'
 import EditReview from './pages/EditReview/EditReview.jsx'
+import ErrorPage from './ErrorElement/ErrorPage.jsx'
 
 
 const router = createBrowserRouter([
@@ -47,6 +48,13 @@ const router = createBrowserRouter([
       {
         path: "/edit-review/:id",
         element: <PrivateRoute><EditReview></EditReview></PrivateRoute>
+      },
+      {
+
+      },
+      {
+        path: "*",
+        element: <ErrorPage></ErrorPage>
       }
     ]
   }

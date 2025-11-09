@@ -20,7 +20,6 @@ export default function EditReview() {
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
 
-    // Fetch existing review data
     useEffect(() => {
         const fetchReview = async () => {
             try {
@@ -36,7 +35,7 @@ export default function EditReview() {
         fetchReview();
     }, [id, axiosSecure]);
 
-    // Handle input changes (controlled form)
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setReview((prev) => ({
@@ -45,7 +44,6 @@ export default function EditReview() {
         }));
     };
 
-    // Handle update
     const handleUpdate = async (e) => {
         e.preventDefault();
 
@@ -55,7 +53,7 @@ export default function EditReview() {
 
             if (res.data.modifiedCount > 0) {
                 toast.success("Review updated successfully!");
-                setTimeout(() => navigate("/my-reviews"), 1500);
+                setTimeout(() => navigate("/my-reviews"), 2000);
             } else {
                 toast.error("No changes made");
             }
