@@ -1,5 +1,9 @@
 import React from "react";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 export default function SingleReviewCard({ review }) {
     const {
@@ -13,8 +17,25 @@ export default function SingleReviewCard({ review }) {
         reviewer_email,
         reviewer_image,
         date,
-        favorites,
+        // favorites,
     } = review;
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
+
+    const handleFavorite = async () => {
+        if (!user) {
+            toast.error("Please login to add favorites");
+            return;
+        }
+        try {
+            await axiosSecure.post("/favorites", { reviewId: review._id });
+            toast.success("Added to favorites!");
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to add favorite");
+        }
+    };
 
     // For rating display
     const stars = Array.from({ length: 5 }, (_, i) =>
@@ -30,11 +51,13 @@ export default function SingleReviewCard({ review }) {
                     alt={food_name}
                     className="w-full h-48 object-cover"
                 />
-                {favorites && (
-                    <span className="absolute top-3 right-3 bg-orange-500 text-white px-2 py-1 text-xs rounded-full">
-                        ❤️ Favorite
-                    </span>
-                )}
+
+                <span className="absolute top-3 right-3 text-white px-2 py-1 text-xs rounded-full">
+                    <button onClick={handleFavorite} className="text-red-500 text-lg">
+                        {review.favorites ? <FaHeart /> : <FaRegHeart />}
+                    </button>
+                </span>
+
             </div>
 
             {/* Review Details */}
@@ -70,6 +93,12 @@ export default function SingleReviewCard({ review }) {
                         {new Date(date).toLocaleDateString("en-GB")}
                     </div>
                 </div>
+                <button
+                    onClick={() => navigate(`/review/${review._id}`)}
+                    className="bg-orange-500 hover:bg-orange-600 text-white py-1 px-3 rounded mt-4 font-medium text-xl cursor-pointer"
+                >
+                    View Details
+                </button>
             </div>
         </div>
     );
