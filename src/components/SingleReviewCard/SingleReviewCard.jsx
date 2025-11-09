@@ -24,6 +24,7 @@ export default function SingleReviewCard({ review }) {
     const navigate = useNavigate();
 
     const [isFavorite, setIsFavorite] = useState(false);
+    const [favoriteId, setFavoriteId] = useState(null);
 
     useEffect(() => {
         const checkFavorite = async () => {
@@ -33,6 +34,7 @@ export default function SingleReviewCard({ review }) {
                 const fav = res.data.find((f) => f.review_id === _id);
                 if (fav) {
                     setIsFavorite(true);
+                    setFavoriteId(fav._id);
                 }
             }
             catch (err) {
@@ -48,9 +50,19 @@ export default function SingleReviewCard({ review }) {
             return;
         }
         try {
-            await axiosSecure.post("/favorites", { reviewId: _id, user_email: user.email });
-            toast.success("Added to favorites!");
-            setIsFavorite(true);
+            if(!isFavorite){
+                const res = await axiosSecure.post("/favorites", { reviewId: _id, user_email: user.email });
+                toast.success("Added to favorites!");
+                setIsFavorite(true);
+                setFavoriteId(res.data.insertedId)
+            }
+            else{
+                if (!favoriteId) return;
+                await axiosSecure.delete(`favorites/${favoriteId}`, { data: { user_email: user.email } });
+                toast.success("Removed from favorites");
+                setIsFavorite(false);
+                setFavoriteId(null);
+            }
         } catch (err) {
             console.error(err);
             toast.error("Failed to add favorite");
