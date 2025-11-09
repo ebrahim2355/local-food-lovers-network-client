@@ -12,6 +12,7 @@ import PrivateRoute from './routes/PrivateRoute.jsx'
 import AddReview from './pages/AddReview/AddReview.jsx'
 import { Toaster } from 'react-hot-toast'
 import MyReviews from './pages/MyReviews/MyReviews.jsx'
+import EditReview from './pages/EditReview/EditReview.jsx'
 
 
 const router = createBrowserRouter([
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "my-reviews",
         element: <PrivateRoute><MyReviews></MyReviews></PrivateRoute>
+      },
+      {
+        path: "/edit-review/:id",
+        element: <PrivateRoute><EditReview></EditReview></PrivateRoute>
       }
     ]
   }

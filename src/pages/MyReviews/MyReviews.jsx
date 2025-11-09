@@ -17,7 +17,7 @@ export default function MyReviews() {
     useEffect(() => {
         if (user?.email) {
             axiosSecure
-                .get(`/reviews/${user.email}`)
+                .get(`/reviews/user/${user.email}`)
                 .then((res) => {
                     setReviews(res.data);
                     setLoading(false);
