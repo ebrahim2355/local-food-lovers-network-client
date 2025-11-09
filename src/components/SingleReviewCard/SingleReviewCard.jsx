@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 
 export default function SingleReviewCard({ review }) {
     const {
+        _id,
         food_name,
         food_image,
         restaurant_name,
@@ -17,11 +18,29 @@ export default function SingleReviewCard({ review }) {
         reviewer_email,
         reviewer_image,
         date,
-        // favorites,
     } = review;
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
+
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    useEffect(() => {
+        const checkFavorite = async () => {
+            if (!user) return;
+            try {
+                const res = await axiosSecure.get(`/favorites/${user.email}`);
+                const fav = res.data.find((f) => f.review_id === _id);
+                if (fav) {
+                    setIsFavorite(true);
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        checkFavorite();
+    }, [_id, axiosSecure, user])
 
     const handleFavorite = async () => {
         if (!user) {
@@ -29,8 +48,9 @@ export default function SingleReviewCard({ review }) {
             return;
         }
         try {
-            await axiosSecure.post("/favorites", { reviewId: review._id });
+            await axiosSecure.post("/favorites", { reviewId: _id, user_email: user.email });
             toast.success("Added to favorites!");
+            setIsFavorite(true);
         } catch (err) {
             console.error(err);
             toast.error("Failed to add favorite");
@@ -51,13 +71,12 @@ export default function SingleReviewCard({ review }) {
                     alt={food_name}
                     className="w-full h-48 object-cover"
                 />
-
-                <span className="absolute top-3 right-3 text-white px-2 py-1 text-xs rounded-full">
-                    <button onClick={handleFavorite} className="text-red-500 text-lg">
-                        {review.favorites ? <FaHeart /> : <FaRegHeart />}
-                    </button>
-                </span>
-
+                <button
+                    onClick={handleFavorite}
+                    className="absolute top-3 right-3 text-red-500 text-2xl"
+                >
+                    {isFavorite ? <FaHeart /> : <FaRegHeart />}
+                </button>
             </div>
 
             {/* Review Details */}

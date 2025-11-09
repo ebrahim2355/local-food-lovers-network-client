@@ -15,6 +15,7 @@ import MyReviews from './pages/MyReviews/MyReviews.jsx'
 import EditReview from './pages/EditReview/EditReview.jsx'
 import ErrorPage from './ErrorElement/ErrorPage.jsx'
 import ReviewDetails from './pages/ReviewDetails/ReviewDetails.jsx'
+import MyFavorites from './pages/MyFavorites/MyFavorites.jsx'
 
 
 const router = createBrowserRouter([
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "/review/:id",
         element: <PrivateRoute><ReviewDetails></ReviewDetails></PrivateRoute>
+      },
+      {
+        path: "my-favorites",
+        element: <PrivateRoute><MyFavorites></MyFavorites></PrivateRoute>
       },
       {
         path: "*",

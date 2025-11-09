@@ -51,7 +51,7 @@ export default function ReviewDetails() {
         <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-10 min-h-screen">
             <button
                 onClick={() => navigate(-1)}
-                className="mb-6 text-orange-500 font-semibold hover:underline"
+                className="mb-6 text-orange-500 font-semibold hover:underline cursor-pointer"
             >
                 ← Back to All Reviews
             </button>
