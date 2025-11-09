@@ -11,6 +11,7 @@ import AllReviews from './pages/AllReviews/AllReviews.jsx'
 import PrivateRoute from './routes/PrivateRoute.jsx'
 import AddReview from './pages/AddReview/AddReview.jsx'
 import { Toaster } from 'react-hot-toast'
+import MyReviews from './pages/MyReviews/MyReviews.jsx'
 
 
 const router = createBrowserRouter([
@@ -32,11 +33,15 @@ const router = createBrowserRouter([
       },
       {
         path: "all-reviews",
-        element: <PrivateRoute><AllReviews></AllReviews></PrivateRoute>
+        element: <AllReviews></AllReviews>
       },
       {
         path: "add-review",
         element: <PrivateRoute><AddReview></AddReview></PrivateRoute>
+      },
+      {
+        path: "my-reviews",
+        element: <PrivateRoute><MyReviews></MyReviews></PrivateRoute>
       }
     ]
   }
