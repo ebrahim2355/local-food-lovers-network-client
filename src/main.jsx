@@ -7,6 +7,8 @@ import Home from './pages/Home/Home.jsx'
 import Login from './pages/Login/Login.jsx'
 import AuthProvider from './contexts/AuthProvider.jsx'
 import Register from './pages/Register/Register.jsx'
+import AllReviews from './pages/AllReviews/AllReviews.jsx'
+import PrivateRoute from './routes/PrivateRoute.jsx'
 
 
 const router = createBrowserRouter([
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+      {
+        path: "all-reviews",
+        element: <PrivateRoute><AllReviews></AllReviews></PrivateRoute>
       }
     ]
   }
