@@ -51,7 +51,7 @@ export default function Register() {
                             toast.error("Failed to save user to database");
                         }
 
-                        navigate("/");
+                        setTimeout(() => {navigate("/")}, 1500);
                     })
                     .catch((err) => toast.error(err.message));
             })
@@ -87,7 +87,7 @@ export default function Register() {
                 toast.error("Failed to save Google user to database");
             }
 
-            navigate("/");
+            setTimeout(() => {navigate("/")}, 1500);
         }
         catch(err){
             toast.error(err.message);

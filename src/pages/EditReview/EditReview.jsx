@@ -15,7 +15,7 @@ export default function EditReview() {
         location: "",
         rating: "",
         review_text: "",
-        favorites: false,
+        // favorites: false,
     });
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
@@ -181,7 +181,7 @@ export default function EditReview() {
                     </div>
 
                     {/* Favorite */}
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                         <input
                             type="checkbox"
                             name="favorites"
@@ -190,7 +190,7 @@ export default function EditReview() {
                             className="accent-orange-500 w-5 h-5"
                         />
                         <label className="text-gray-700">Mark as Favorite ❤️</label>
-                    </div>
+                    </div> */}
 
                     {/* Submit Button */}
                     <button

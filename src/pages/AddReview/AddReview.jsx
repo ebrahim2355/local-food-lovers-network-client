@@ -25,7 +25,7 @@ export default function AddReview() {
             reviewer_email: user?.email,
             reviewer_image: user?.photoURL || "https://i.ibb.co/3N1sTkn/user.png",
             date: new Date(),
-            favorites: form.favorites.checked,
+            // favorites: form.favorites.checked,
         };
 
         try {
@@ -114,14 +114,14 @@ export default function AddReview() {
                             className="w-full p-3 border rounded-lg focus:outline-orange-500"
                         ></textarea>
 
-                        <label className="flex items-center gap-2 text-gray-700 text-sm">
+                        {/* <label className="flex items-center gap-2 text-gray-700 text-sm">
                             <input
                                 type="checkbox"
                                 name="favorites"
                                 className="accent-orange-500"
                             />
                             Mark as Favorite ❤️
-                        </label>
+                        </label> */}
                     </div>
 
                     <button

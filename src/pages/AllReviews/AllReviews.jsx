@@ -3,27 +3,33 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { toast } from "react-hot-toast";
 import SingleReviewCard from "../../components/SingleReviewCard/SingleReviewCard";
 
-
 export default function AllReviews() {
     const axiosSecure = useAxiosSecure();
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+
+    const fetchReviews = async (searchTerm = "") => {
+        setLoading(true);
+        try {
+            const res = await axiosSecure.get(`/reviews${searchTerm ? `?search=${searchTerm}` : ""}`);
+            setReviews(res.data);
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to load reviews");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchReviews = async () => {
-            try {
-                const res = await axiosSecure.get("/reviews");
-                console.log(res.data)
-                setReviews(res.data);
-            } catch (err) {
-                console.error(err);
-                toast.error("Failed to load reviews");
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchReviews();
-    }, [axiosSecure]);
+    }, []);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        fetchReviews(search);
+    };
 
     if (loading)
         return (
@@ -37,6 +43,23 @@ export default function AllReviews() {
             <h1 className="text-3xl font-bold text-orange-600 mb-6 text-center">
                 All Reviews
             </h1>
+
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="flex justify-center mb-6">
+                <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search by food name..."
+                    className="w-full sm:w-1/2 p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <button
+                    type="submit"
+                    className="bg-orange-500 hover:bg-orange-600 text-white px-4 rounded-r-lg font-medium cursor-pointer"
+                >
+                    Search
+                </button>
+            </form>
 
             {reviews.length === 0 ? (
                 <p className="text-center text-gray-500">No reviews found.</p>
