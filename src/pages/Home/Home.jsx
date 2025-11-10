@@ -21,7 +21,7 @@ export default function Home() {
     useEffect(() => {
         const fetchFeaturedReviews = async () => {
             try {
-                const res = await axiosSecure.get("/reviews?sort=rating");
+                const res = await axiosSecure.get("/reviews?limit=6&sort=rating");
                 setFeaturedReviews(res.data);
             } catch (err) {
                 console.error(err);
