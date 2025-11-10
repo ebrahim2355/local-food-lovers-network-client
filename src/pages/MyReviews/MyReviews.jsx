@@ -65,7 +65,7 @@ export default function MyReviews() {
         );
 
     return (
-        <div className="max-w-6xl mx-auto p-10 pb-20">
+        <div className="max-w-6xl mx-auto p-4 pt-10 pb-20">
             <h2 className="text-3xl font-bold mb-6 text-center">My Reviews</h2>
             <Toaster />
 

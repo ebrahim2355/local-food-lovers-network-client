@@ -76,7 +76,7 @@ export default function Register() {
             try{
                 const res = await axiosSecure.post("/users", newUser);
                 if(res.data.message){
-                    toast("User already exists in Database")
+                    // toast("User already exists in Database")
                 }
                 else{
                     toast.success("Signed up with Google!");
@@ -84,7 +84,7 @@ export default function Register() {
             }
             catch(err){
                 console.error(err);
-                toast.error("Failed to save Google user to database");
+                // toast.error("Failed to save Google user to database");
             }
 
             setTimeout(() => {navigate("/")}, 1500);
