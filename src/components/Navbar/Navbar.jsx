@@ -19,7 +19,6 @@ export default function Navbar() {
         <>
             <li><NavLink to="/" className="hover:text-orange-500">Home</NavLink></li>
             <li><NavLink to="/all-reviews" className="hover:text-orange-500">All Reviews</NavLink></li>
-            <li><NavLink to="/about" className="hover:text-orange-500">About</NavLink></li>
         </>
     );
 
@@ -65,7 +64,7 @@ export default function Navbar() {
 
                     {/* Mobile Menu Toggle */}
                     <button
-                        className="md:hidden text-2xl text-gray-700"
+                        className="md:hidden text-2xl text-gray-700 cursor-pointer hover:outline hover:outline-gray-200 hover:bg-gray-100 hover:rounded-2xl p-1"
                         onClick={() => setMenuOpen(!menuOpen)}
                     >
                         {menuOpen ? <FaTimes /> : <FaBars />}

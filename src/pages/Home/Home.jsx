@@ -3,10 +3,11 @@ import { useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import SingleReviewCard from "../../components/SingleReviewCard/SingleReviewCard";
 import { toast } from "react-hot-toast";
+import Slider from "react-slick";
 
 const banners = [
-    { id: 1, image: "https://i.ibb.co.com/356Cbs3b/download-1.jpg", title: "Delicious Meals", subtitle: "Experience the best flavors!" },
-    { id: 2, image: "https://plus.unsplash.com/premium_photo-1664472680005-b9976125009d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870", title: "Tasty Treats", subtitle: "Find top-rated foods near you!" },
+    { id: 1, image: "https://plus.unsplash.com/premium_photo-1672938878598-31c1c614f708?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870", title: "Delicious Meals", subtitle: "Experience the best flavors!" }, 
+    { id: 2, image: "https://images.unsplash.com/photo-1542444256-164bd32f11fc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1005", title: "Tasty Treats", subtitle: "Find top-rated foods near you!" }, 
     { id: 3, image: "https://plus.unsplash.com/premium_photo-1672363353881-68c8ff594e25?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687", title: "Food Lovers Unite", subtitle: "Reviews you can trust!" },
 ];
 
@@ -15,7 +16,7 @@ export default function Home() {
     const navigate = useNavigate();
     const [featuredReviews, setFeaturedReviews] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [currentSlide, setCurrentSlide] = useState(0);
+    // const [currentSlide, setCurrentSlide] = useState(0);
 
     useEffect(() => {
         const fetchFeaturedReviews = async () => {
@@ -32,38 +33,46 @@ export default function Home() {
         fetchFeaturedReviews();
     }, [axiosSecure]);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % banners.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, []);
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 800,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        arrows: true,
+        adaptiveHeight: true,
+    };
 
     return (
         <div className="min-h-screen">
 
-            <section className="relative w-full h-64 sm:h-96 overflow-hidden rounded-lg mb-10">
-                {banners.map((banner, idx) => (
-                    <div
-                        key={banner.id}
-                        className={`absolute inset-0 transition-opacity duration-1000 ${idx === currentSlide ? "opacity-100" : "opacity-0"}`}
-                    >
-                        <img src={banner.image} alt={banner.title} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-center text-white p-4">
-                            <h1 className="text-2xl sm:text-4xl font-bold">{banner.title}</h1>
-                            <p className="mt-2 sm:text-lg">{banner.subtitle}</p>
-                            <button
-                                onClick={() => navigate("/all-reviews")}
-                                className="mt-4 bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded font-semibold transition cursor-pointer"
-                            >
-                                Show All Reviews
-                            </button>
+            <section className="mb-10">
+                <Slider {...settings}>
+                    {banners.map((banner) => (
+                        <div key={banner.id} className="relative h-64 sm:h-96">
+                            <img
+                                src={banner.image}
+                                alt={banner.title}
+                                className="w-full h-full object-cover rounded-lg"
+                            />
+                            <div className="absolute inset-0 bg-opacity-40 flex flex-col justify-center items-center text-center text-white p-4">
+                                <h1 className="text-2xl sm:text-4xl font-bold">{banner.title}</h1>
+                                <p className="mt-2 sm:text-lg">{banner.subtitle}</p>
+                                <button
+                                    onClick={() => navigate("/all-reviews")}
+                                    className="mt-4 bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded font-semibold transition cursor-pointer"
+                                >
+                                    Show All Reviews
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </Slider>
             </section>
 
-            <section className="max-w-7xl mx-auto px-4 mb-10">
+            <section className="max-w-7xl mx-auto px-4 mt-20 mb-10">
                 <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center">Top Reviews</h2>
                 {loading ? (
                     <p className="text-center text-orange-600 text-xl">Loading featured reviews...</p>
