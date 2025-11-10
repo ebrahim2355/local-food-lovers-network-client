@@ -1,6 +1,6 @@
 # 🍽️ FoodieReview — Share & Discover the Best Food Experiences
 
-**Live Site:** [https://foodie-review.web.app](https://foodie-review.web.app)  
+**Live Site:** [https://local-food-lovers-networ-7125e.web.app](https://local-food-lovers-networ-7125e.web.app)  
 *(Replace the link above with your actual live site URL)*
 
 ## 📖 Overview
@@ -34,7 +34,7 @@ The site features dynamic data fetching, secure authentication, responsive desig
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/foodie-review.git
+   git clone https://github.com/ebrahim2355/local-food-lovers-network-client.git
    cd foodie-review
    npm install
    npm run dev
@@ -48,6 +48,7 @@ http://localhost:5173
 ## 👨‍💻 Developer
 
 **Developed by:** MD. Ebrahim Ali
+
 **Email:** web.ebrahimali@gmail.com
 
 ---
