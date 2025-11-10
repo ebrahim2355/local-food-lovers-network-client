@@ -45,7 +45,7 @@ export default function Navbar() {
                                 src={user.photoURL || "https://i.ibb.co/Z8t0mMC/user1.jpg"}
                                 alt="User"
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                                className="w-10 h-10 rounded-full cursor-pointer border-2 border-orange-500"
+                                className="w-10 rounded-full cursor-pointer border-2 border-orange-500"
                             />
                             {dropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white border shadow-lg rounded-lg p-2">
