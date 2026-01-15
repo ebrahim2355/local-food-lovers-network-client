@@ -2,12 +2,16 @@ import React, { useContext, useState } from "react";
 import { Link, NavLink } from "react-router";
 import { FaBars, FaTimes, FaHeart, FaPlusCircle, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { FiMoon, FiSun } from "react-icons/fi";
 
 
 export default function Navbar() {
     const { user, logOut } = useContext(AuthContext) || {};
     const [menuOpen, setMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const { theme, toggleTheme } = useContext(ThemeContext);
 
     const handleLogout = () => {
         logOut()
@@ -33,6 +37,11 @@ export default function Navbar() {
                 <ul className="hidden md:flex gap-6 text-gray-700 font-medium">{navLinks}</ul>
 
                 <div className="flex items-center gap-4">
+
+                    <button onClick={toggleTheme} className="p-2 rounded-full">
+                        {theme === "dark" ? <FiSun /> : <FiMoon />}
+                    </button>
+
                     {!user ? (
                         <>
                             <Link to="/login" className="text-gray-700 font-medium hover:text-orange-600">Login</Link>

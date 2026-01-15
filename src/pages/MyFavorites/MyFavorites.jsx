@@ -63,7 +63,7 @@ export default function MyFavorites() {
     if (favorites.length === 0) return <p className="text-center py-10">No favorites yet.</p>;
 
     return (
-        <div className="max-w-6xl mx-auto p-4 pt-10 pb-20">
+        <div className="min-h-screen max-w-6xl mx-auto p-4 pt-10 pb-20">
             <h2 className="text-3xl font-bold mb-6 text-center text-orange-600">My Favorites</h2>
 
             {/* Table for medium+ screens */}
@@ -94,7 +94,7 @@ export default function MyFavorites() {
                                 <td>
                                     <button
                                         onClick={() => handleDelete(fav._id)}
-                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 cursor-pointer"
                                     >
                                         Delete
                                     </button>
@@ -108,7 +108,7 @@ export default function MyFavorites() {
             {/* Card layout for small screens */}
             <div className="md:hidden flex flex-col gap-4">
                 {favorites.map((fav) => (
-                    <div key={fav._id} className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
+                    <div key={fav._id} className="card">
                         <div className="flex gap-4 p-4 items-center">
                             <img
                                 src={fav.review?.food_image || "https://i.ibb.co/3N1sTkn/user.png"}
@@ -122,13 +122,13 @@ export default function MyFavorites() {
                             </div>
                             <button
                                 onClick={() => handleDelete(fav._id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm cursor-pointer"
                             >
                                 Delete
                             </button>
                         </div>
                         {fav.review?.review_text && (
-                            <p className="p-4 text-gray-700 text-sm line-clamp-3">{fav.review.review_text}</p>
+                            <p className="m-4 text-sm line-clamp-3">{fav.review.review_text}</p>
                         )}
                     </div>
                 ))}

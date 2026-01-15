@@ -75,13 +75,13 @@ export default function SingleReviewCard({ review }) {
     );
 
     return (
-        <div className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 w-full">
+        <div className="card">
             {/* Food Image */}
             <div className="relative">
                 <img
                     src={food_image || "https://i.ibb.co/3N1sTkn/user.png"}
                     alt={food_name}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover rounded-t-2xl"
                 />
                 <button
                     onClick={handleFavorite}
@@ -101,7 +101,7 @@ export default function SingleReviewCard({ review }) {
 
                     <div className="flex items-center gap-1 mb-3">{stars}</div>
 
-                    <p className="text-gray-700 text-sm line-clamp-3">
+                    <p className="text-gray-700 text-sm line-clamp-3 min-h-[62px]">
                         {review_text || "No review text provided."}
                     </p>
                 </div>
@@ -126,7 +126,7 @@ export default function SingleReviewCard({ review }) {
                 </div>
                 <button
                     onClick={() => navigate(`/review/${review._id}`)}
-                    className="bg-orange-500 hover:bg-orange-600 text-white py-1 px-3 rounded mt-4 font-medium text-xl cursor-pointer"
+                    className="btn-primary mt-4"
                 >
                     View Details
                 </button>

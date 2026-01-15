@@ -16,6 +16,7 @@ import EditReview from './pages/EditReview/EditReview.jsx'
 import ErrorPage from './ErrorElement/ErrorPage.jsx'
 import ReviewDetails from './pages/ReviewDetails/ReviewDetails.jsx'
 import MyFavorites from './pages/MyFavorites/MyFavorites.jsx'
+import ThemeProvider from './contexts/ThemeProvider.jsx'
 
 
 const router = createBrowserRouter([
@@ -69,9 +70,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router}></RouterProvider>
-      <Toaster position="top-center" reverseOrder={false} />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <RouterProvider router={router}></RouterProvider>
+        <Toaster position="top-center" reverseOrder={false} />
+      </AuthProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

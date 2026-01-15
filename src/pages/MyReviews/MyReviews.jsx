@@ -65,14 +65,14 @@ export default function MyReviews() {
         );
 
     return (
-        <div className="max-w-6xl mx-auto p-4 pt-10 pb-20">
+        <div className="min-h-screen max-w-6xl mx-auto p-4 pt-10 pb-20">
             <h2 className="text-3xl font-bold mb-6 text-center">My Reviews</h2>
             <Toaster />
 
             {/* Table layout for medium+ screens */}
             <div className="hidden md:block overflow-x-auto shadow-lg rounded-lg">
                 <table className="table w-full">
-                    <thead className="bg-gray-200">
+                    <thead className="">
                         <tr>
                             <th>Food Image</th>
                             <th>Food Name</th>
@@ -97,13 +97,13 @@ export default function MyReviews() {
                                 <td className="space-x-2">
                                     <button
                                         onClick={() => navigate(`/edit-review/${review._id}`)}
-                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 cursor-pointer"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => handleDelete(review._id)}
-                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 cursor-pointer"
                                     >
                                         Delete
                                     </button>
@@ -115,9 +115,9 @@ export default function MyReviews() {
             </div>
 
             {/* Card layout for small screens */}
-            <div className="md:hidden flex flex-col gap-4">
+            <div className=" md:hidden flex flex-col gap-4">
                 {reviews.map((review) => (
-                    <div key={review._id} className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
+                    <div key={review._id} className="card">
                         <div className="flex gap-4 p-4 items-center">
                             <img
                                 src={review.food_image}
@@ -133,13 +133,13 @@ export default function MyReviews() {
                         <div className="flex justify-end p-4 gap-2">
                             <button
                                 onClick={() => navigate(`/edit-review/${review._id}`)}
-                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm cursor-pointer"
                             >
                                 Edit
                             </button>
                             <button
                                 onClick={() => handleDelete(review._id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm cursor-pointer"
                             >
                                 Delete
                             </button>

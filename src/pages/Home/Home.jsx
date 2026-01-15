@@ -62,7 +62,7 @@ export default function Home() {
                                 <p className="mt-2 sm:text-lg">{banner.subtitle}</p>
                                 <button
                                     onClick={() => navigate("/all-reviews")}
-                                    className="mt-4 bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded font-semibold transition cursor-pointer"
+                                    className="mt-4 btn-primary"
                                 >
                                     Show All Reviews
                                 </button>
@@ -94,7 +94,7 @@ export default function Home() {
                 </p>
                 <button
                     onClick={() => navigate("/add-review")}
-                    className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-semibold transition"
+                    className="btn-primary"
                 >
                     Add Your Review
                 </button>
@@ -107,7 +107,7 @@ export default function Home() {
                 </p>
                 <button
                     onClick={() => navigate("/all-reviews")}
-                    className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-semibold transition"
+                    className="btn-primary"
                 >
                     Explore All Reviews
                 </button>

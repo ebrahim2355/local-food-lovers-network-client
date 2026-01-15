@@ -127,7 +127,7 @@ export default function AddReview() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold text-base sm:text-lg cursor-pointer"
+                        className="w-full btn-primary"
                     >
                         {loading ? "Submitting..." : "Add Review"}
                     </button>

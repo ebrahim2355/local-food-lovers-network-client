@@ -48,7 +48,7 @@ export default function ReviewDetails() {
     );
 
     return (
-        <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-10 min-h-screen">
+        <div className="min-h-screen max-w-4xl mx-auto p-4 sm:p-6 md:p-10">
             <button
                 onClick={() => navigate(-1)}
                 className="mb-6 text-orange-500 font-semibold hover:underline cursor-pointer"
