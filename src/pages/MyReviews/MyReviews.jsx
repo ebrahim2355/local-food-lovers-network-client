@@ -66,13 +66,13 @@ export default function MyReviews() {
 
     return (
         <div className="min-h-screen max-w-6xl mx-auto p-4 pt-10 pb-20">
-            <h2 className="text-3xl font-bold mb-6 text-center">My Reviews</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center text-orange-500">My Reviews</h2>
             <Toaster />
 
             {/* Table layout for medium+ screens */}
             <div className="hidden md:block overflow-x-auto shadow-lg rounded-lg">
                 <table className="table w-full">
-                    <thead className="">
+                    <thead className=" dark:bg-gray-500">
                         <tr>
                             <th>Food Image</th>
                             <th>Food Name</th>

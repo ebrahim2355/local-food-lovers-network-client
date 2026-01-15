@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
 
 export default function AddReview() {
@@ -23,16 +23,16 @@ export default function AddReview() {
             review_text: form.review_text.value,
             reviewer_name: user?.displayName || "Anonymous User",
             reviewer_email: user?.email,
-            reviewer_image: user?.photoURL || "https://i.ibb.co/3N1sTkn/user.png",
+            reviewer_image:
+                user?.photoURL || "https://i.ibb.co/3N1sTkn/user.png",
             date: new Date(),
-            // favorites: form.favorites.checked,
         };
 
         try {
             setLoading(true);
             const res = await axiosSecure.post("/reviews", newReview);
-            if (res.data?.insertedId || res.data?.acknowledged) {
-                toast.success("Review added successfully!");
+            if (res.data?.insertedId) {
+                toast.success("Review added successfully");
                 form.reset();
                 setTimeout(() => navigate("/all-reviews"), 1200);
             } else {
@@ -40,99 +40,76 @@ export default function AddReview() {
             }
         } catch (err) {
             console.error(err);
-            toast.error("Something went wrong while adding review");
+            toast.error("Something went wrong");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex justify-center items-center bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-            <Toaster />
-            <div className="bg-white shadow-lg rounded-2xl p-6 sm:p-8 w-full max-w-2xl">
-                <h2 className="text-2xl sm:text-3xl font-bold text-center text-orange-600 mb-6">
+        <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-[rgb(var(--color-bg))]">
+            <div className="card w-full max-w-2xl p-6 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">
                     Add a New Review
                 </h2>
 
-                <form
-                    onSubmit={handleAddReview}
-                    className="flex flex-col gap-5 sm:gap-6"
-                >
+                <form onSubmit={handleAddReview} className="space-y-6">
                     {/* Food Info */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                        <input
-                            type="text"
-                            name="food_name"
-                            placeholder="Food Name"
-                            required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500"
-                        />
-                        <input
-                            type="text"
-                            name="food_image"
-                            placeholder="Food Image URL"
-                            required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500"
-                        />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Input name="food_name" placeholder="Food Name" />
+                        <Input name="food_image" placeholder="Food Image URL" />
                     </div>
 
                     {/* Restaurant Info */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                        <input
-                            type="text"
-                            name="restaurant_name"
-                            placeholder="Restaurant Name"
-                            required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500"
-                        />
-                        <input
-                            type="text"
-                            name="location"
-                            placeholder="Location"
-                            required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500"
-                        />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Input name="restaurant_name" placeholder="Restaurant Name" />
+                        <Input name="location" placeholder="Location" />
                     </div>
 
-                    {/* Rating & Review */}
-                    <div className="flex flex-col gap-4">
-                        <input
-                            type="number"
-                            name="rating"
-                            placeholder="Rating (1 - 5)"
-                            min="1"
-                            max="5"
-                            step="0.1"
-                            required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500"
-                        />
-                        <textarea
-                            name="review_text"
-                            placeholder="Write your review..."
-                            rows="5"
-                            required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500"
-                        ></textarea>
+                    {/* Rating */}
+                    <Input
+                        name="rating"
+                        type="number"
+                        placeholder="Rating (1 – 5)"
+                        min="1"
+                        max="5"
+                        step="0.1"
+                    />
 
-                        {/* <label className="flex items-center gap-2 text-gray-700 text-sm">
-                            <input
-                                type="checkbox"
-                                name="favorites"
-                                className="accent-orange-500"
-                            />
-                            Mark as Favorite ❤️
-                        </label> */}
-                    </div>
+                    {/* Review */}
+                    <textarea
+                        name="review_text"
+                        rows="5"
+                        required
+                        placeholder="Write your honest review..."
+                        className="w-full p-3 rounded-lg border bg-transparent outline-none
+              border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-primary"
+                    />
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full btn-primary"
+                        className="btn-primary w-full disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {loading ? "Submitting..." : "Add Review"}
                     </button>
                 </form>
             </div>
         </div>
+    );
+}
+
+/* Reusable Input */
+function Input({ type = "text", ...props }) {
+    return (
+        <input
+            type={type}
+            required
+            className="w-full p-3 rounded-lg border bg-transparent outline-none
+        border-gray-300 dark:border-gray-600
+        focus:ring-2 focus:ring-primary"
+            {...props}
+        />
     );
 }

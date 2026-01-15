@@ -19,6 +19,7 @@ export default function SingleReviewCard({ review }) {
         reviewer_image,
         date,
     } = review;
+
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
@@ -36,97 +37,116 @@ export default function SingleReviewCard({ review }) {
                     setIsFavorite(true);
                     setFavoriteId(fav._id);
                 }
+            } catch (err) {
+                console.error(err);
             }
-            catch (err) {
-                console.log(err);
-            }
-        }
+        };
         checkFavorite();
-    }, [_id, axiosSecure, user])
+    }, [_id, axiosSecure, user]);
 
     const handleFavorite = async () => {
         if (!user) {
-            toast.error("Please login to add favorites");
+            toast.error("Please login to manage favorites");
             return;
         }
+
         try {
-            if(!isFavorite){
-                const res = await axiosSecure.post("/favorites", { reviewId: _id, user_email: user.email });
-                toast.success("Added to favorites!");
+            if (!isFavorite) {
+                const res = await axiosSecure.post("/favorites", {
+                    reviewId: _id,
+                    user_email: user.email,
+                });
+                toast.success("Added to favorites");
                 setIsFavorite(true);
-                setFavoriteId(res.data.insertedId)
-            }
-            else{
+                setFavoriteId(res.data.insertedId);
+            } else {
                 if (!favoriteId) return;
-                await axiosSecure.delete(`favorites/${favoriteId}`, { data: { user_email: user.email } });
+                await axiosSecure.delete(`/favorites/${favoriteId}`);
                 toast.success("Removed from favorites");
                 setIsFavorite(false);
                 setFavoriteId(null);
             }
         } catch (err) {
             console.error(err);
-            toast.error("Failed to add favorite");
+            toast.error("Failed to update favorite");
         }
     };
 
-    // For rating display
     const stars = Array.from({ length: 5 }, (_, i) =>
-        i < Math.round(rating) ? <FaStar key={i} className="text-yellow-400" /> : <FaRegStar key={i} className="text-gray-300" />
+        i < Math.round(rating) ? (
+            <FaStar key={i} className="text-yellow-400" />
+        ) : (
+            <FaRegStar key={i} className="text-gray-400" />
+        )
     );
 
     return (
-        <div className="card">
-            {/* Food Image */}
+        <div className="card flex flex-col h-full hover:shadow-xl transition-shadow">
+            {/* Image */}
             <div className="relative">
                 <img
                     src={food_image || "https://i.ibb.co/3N1sTkn/user.png"}
                     alt={food_name}
-                    className="w-full h-48 object-cover rounded-t-2xl"
+                    className="w-full h-48 object-cover rounded-t-card rounded-t-md"
                 />
+
+                {/* Favorite Button */}
                 <button
                     onClick={handleFavorite}
-                    className="absolute top-3 right-3 text-red-500 text-2xl cursor-pointer"
+                    className="absolute top-3 right-3 p-2 rounded-full bg-white/90 dark:bg-gray-900/80 hover:scale-110 transition"
+                    aria-label="Toggle favorite"
                 >
-                    {isFavorite ? <FaHeart /> : <FaRegHeart />}
+                    {isFavorite ? (
+                        <FaHeart className="text-red-500 text-xl" />
+                    ) : (
+                        <FaRegHeart className="text-red-500 text-xl" />
+                    )}
                 </button>
             </div>
 
-            {/* Review Details */}
-            <div className="p-5 flex flex-col justify-between">
-                <div>
-                    <h2 className="text-lg font-bold text-gray-800 mb-1">{food_name}</h2>
-                    <p className="text-sm text-gray-500 mb-1">
+            {/* Content */}
+            <div className="p-5 flex flex-col flex-1">
+                <div className="flex-1">
+                    <h2 className="text-lg font-bold mb-1">
+                        {food_name}
+                    </h2>
+
+                    <p className="text-sm opacity-80 mb-1">
                         <span className="font-medium">{restaurant_name}</span> • {location}
                     </p>
 
-                    <div className="flex items-center gap-1 mb-3">{stars}</div>
+                    <div className="flex items-center gap-1 mb-3">
+                        {stars}
+                        <span className="text-xs opacity-70 ml-1">
+                            ({rating})
+                        </span>
+                    </div>
 
-                    <p className="text-gray-700 text-sm line-clamp-3 min-h-[62px]">
+                    <p className="text-sm leading-relaxed line-clamp-3 min-h-[60px] opacity-90">
                         {review_text || "No review text provided."}
                     </p>
                 </div>
 
-                {/* Reviewer Info */}
-                <div className="flex items-center gap-3 mt-5 pt-3 border-t border-gray-100">
+                {/* Reviewer */}
+                <div className="flex items-center gap-3 mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <img
-                        src={
-                            reviewer_image ||
-                            "https://i.ibb.co/3N1sTkn/user.png"
-                        }
+                        src={reviewer_image || "https://i.ibb.co/3N1sTkn/user.png"}
                         alt={reviewer_name}
-                        className="w-10 h-10 rounded-full border"
+                        className="w-10 h-10 rounded-full object-cover border"
                     />
                     <div className="text-sm">
-                        <h3 className="font-semibold text-gray-800">{reviewer_name}</h3>
-                        <p className="text-gray-500 text-xs">{reviewer_email}</p>
+                        <p className="font-semibold">{reviewer_name}</p>
+                        <p className="text-xs opacity-70">{reviewer_email}</p>
                     </div>
-                    <div className="ml-auto text-xs text-gray-400">
+                    <p className="ml-auto text-xs opacity-60">
                         {new Date(date).toLocaleDateString("en-GB")}
-                    </div>
+                    </p>
                 </div>
+
+                {/* CTA */}
                 <button
-                    onClick={() => navigate(`/review/${review._id}`)}
-                    className="btn-primary mt-4"
+                    onClick={() => navigate(`/review/${_id}`)}
+                    className="btn-primary mt-4 w-full"
                 >
                     View Details
                 </button>

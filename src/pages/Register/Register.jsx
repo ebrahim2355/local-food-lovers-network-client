@@ -95,14 +95,14 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen flex justify-center items-center bg-gray-100">
+        <div className="min-h-screen flex justify-center items-center">
             <div><Toaster /></div>
-            <div className="bg-white p-8 shadow-lg rounded-2xl w-96">
+            <div className="card p-8 shadow-lg rounded-2xl w-96">
                 <h2 className="text-2xl font-bold text-center mb-6 text-orange-600">Create an Account</h2>
                 <form onSubmit={handleRegister} className="space-y-4">
-                    <input type="text" name="name" placeholder="Full Name" required className="w-full p-3 border rounded-lg focus:outline-orange-500" />
-                    <input type="text" name="photo" placeholder="Photo URL" className="w-full p-3 border rounded-lg focus:outline-orange-500" />
-                    <input type="email" name="email" placeholder="Email" required className="w-full p-3 border rounded-lg focus:outline-orange-500" />
+                    <input type="text" name="name" placeholder="Full Name" required className="w-full p-3 rounded-lg border border-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                    <input type="text" name="photo" placeholder="Photo URL" className="w-full p-3 rounded-lg border border-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+                    <input type="email" name="email" placeholder="Email" required className="w-full p-3 rounded-lg border border-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500" />
 
                     {/* Password Field */}
                     <div className="relative">
@@ -111,7 +111,7 @@ export default function Register() {
                             name="password"
                             placeholder="Password"
                             required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500 pr-10"
+                            className="w-full p-3 rounded-lg border border-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                         <span
                             className="absolute right-3 top-3 cursor-pointer text-gray-500"
@@ -128,7 +128,7 @@ export default function Register() {
                             name="confirm"
                             placeholder="Confirm Password"
                             required
-                            className="w-full p-3 border rounded-lg focus:outline-orange-500 pr-10"
+                            className="w-full p-3 rounded-lg border border-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                         />
                         <span
                             className="absolute right-3 top-3 cursor-pointer text-gray-500"
@@ -141,7 +141,7 @@ export default function Register() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-semibold"
+                        className="btn-primary w-full"
                     >
                         {loading ? "Registering..." : "Register"}
                     </button>
@@ -151,7 +151,7 @@ export default function Register() {
 
                 <button
                     onClick={handleGoogleLogin}
-                    className="w-full border py-2 rounded-lg flex justify-center items-center gap-2 hover:bg-gray-50"
+                    className="w-full border py-2 rounded-lg flex justify-center items-center gap-2 cursor-pointer hover:bg-gray-50"
                 >
                     <FcGoogle className="text-xl" /> Continue with Google
                 </button>
