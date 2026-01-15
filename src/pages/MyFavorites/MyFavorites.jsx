@@ -3,12 +3,14 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 export default function MyFavorites() {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchFavorites = async () => {
@@ -177,7 +179,14 @@ export default function MyFavorites() {
                                 <td className="p-4">
                                     {new Date(fav.addedAt).toLocaleDateString()}
                                 </td>
-                                <td className="p-4">
+                                <td className="p-4 space-x-2">
+                                    <button
+                                        onClick={() => navigate(`/review/${fav.
+                                            review_id}`)}
+                                        className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 cursor-pointer"
+                                    >
+                                        View
+                                    </button>
                                     <button
                                         onClick={() => handleDelete(fav._id)}
                                         className="px-3 py-1 rounded-md text-sm bg-red-500 text-white hover:bg-red-600 cursor-pointer"
@@ -195,7 +204,8 @@ export default function MyFavorites() {
             <div className="md:hidden grid gap-4">
                 {favorites.map((fav) => (
                     <div key={fav._id} className="card p-4">
-                        <div className="flex gap-4 items-center">
+                        <div onClick={() => navigate(`/review/${fav.
+                            review_id}`)} className="flex gap-4 items-center">
                             <img
                                 src={fav.review?.food_image}
                                 alt={fav.review?.food_name}

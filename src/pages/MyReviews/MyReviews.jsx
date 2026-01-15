@@ -164,6 +164,12 @@ export default function MyReviews() {
                                 <td>{new Date(review.date).toLocaleDateString()}</td>
                                 <td className="space-x-2">
                                     <button
+                                        onClick={() => navigate(`/review/${review._id}`)}
+                                        className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 cursor-pointer"
+                                    >
+                                        View
+                                    </button>
+                                    <button
                                         onClick={() => navigate(`/edit-review/${review._id}`)}
                                         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 cursor-pointer"
                                     >
@@ -186,7 +192,7 @@ export default function MyReviews() {
             <div className=" md:hidden flex flex-col gap-4">
                 {reviews.map((review) => (
                     <div key={review._id} className="card">
-                        <div className="flex gap-4 p-4 items-center">
+                        <div onClick={() => navigate(`/review/${review._id}`)}  className="flex gap-4 p-4 items-center">
                             <img
                                 src={review.food_image}
                                 alt={review.food_name}
@@ -198,16 +204,16 @@ export default function MyReviews() {
                                 <p className="text-xs text-gray-400">{new Date(review.date).toLocaleDateString()}</p>
                             </div>
                         </div>
-                        <div className="flex justify-end p-4 gap-2">
+                        <div className="flex justify-evenly p-4 gap-2">
                             <button
                                 onClick={() => navigate(`/edit-review/${review._id}`)}
-                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm cursor-pointer"
+                                className="bg-blue-500 text-white px-3 py-1 rounded w-full hover:bg-blue-600 text-sm cursor-pointer"
                             >
                                 Edit
                             </button>
                             <button
                                 onClick={() => handleDelete(review._id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm cursor-pointer"
+                                className="bg-red-500 text-white px-3 py-1 rounded w-full hover:bg-red-600 text-sm cursor-pointer"
                             >
                                 Delete
                             </button>

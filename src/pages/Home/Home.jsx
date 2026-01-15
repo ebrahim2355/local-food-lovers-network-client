@@ -36,8 +36,10 @@ export default function Home() {
         const fetchFeaturedReviews = async () => {
             try {
                 const res = await axiosSecure.get("/reviews");
-                // frontend-safe top-rated fallback
-                const topRated = [...res.data]
+                
+                const reviews = res.data.reviews || [];
+
+                const topRated = [...reviews]
                     .sort((a, b) => b.rating - a.rating)
                     .slice(0, 6);
                 setFeaturedReviews(topRated);
