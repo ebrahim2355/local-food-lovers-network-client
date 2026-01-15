@@ -5,17 +5,29 @@ import SingleReviewCard from "../../components/SingleReviewCard/SingleReviewCard
 
 export default function AllReviews() {
     const axiosSecure = useAxiosSecure();
+
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState("");
 
-    const fetchReviews = async (searchTerm = "") => {
+    const [search, setSearch] = useState("");
+    const [activeSearch, setActiveSearch] = useState("");
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const limit = 6;
+
+    const fetchReviews = async (searchTerm = "", page = 1) => {
         setLoading(true);
         try {
             const res = await axiosSecure.get(
-                `/reviews${searchTerm ? `?search=${searchTerm}` : ""}`
+                `/reviews?search=${searchTerm}&page=${page}&limit=${limit}`
             );
-            setReviews(res.data);
+
+            setReviews(res.data.reviews);
+            setTotalPages(res.data.totalPages);
+            setCurrentPage(res.data.page);
+            setActiveSearch(searchTerm);
         } catch (err) {
             console.error(err);
             toast.error("Failed to load reviews");
@@ -25,12 +37,12 @@ export default function AllReviews() {
     };
 
     useEffect(() => {
-        fetchReviews();
+        fetchReviews("", 1);
     }, []);
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchReviews(search.trim());
+        fetchReviews(search.trim(), 1);
     };
 
     return (
@@ -75,18 +87,53 @@ export default function AllReviews() {
                 </div>
             )}
 
-            {/* Results */}
-            {!loading && reviews.length === 0 && (
+            {!loading && reviews?.length === 0 && (
                 <p className="text-center text-gray-500 dark:text-gray-400">
                     No reviews found.
                 </p>
             )}
 
-            {!loading && reviews.length > 0 && (
+            {!loading && reviews?.length > 0 && (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {reviews.map((review) => (
                         <SingleReviewCard key={review._id} review={review} />
                     ))}
+                </div>
+            )}
+
+            {!loading && totalPages > 1 && (
+                <div className="flex justify-center mt-10 gap-2 flex-wrap">
+                    <button
+                        disabled={currentPage === 1}
+                        onClick={() => fetchReviews(activeSearch, currentPage - 1)}
+                        className="px-4 py-2 rounded border disabled:opacity-50"
+                    >
+                        Prev
+                    </button>
+
+                    {[...Array(totalPages)].map((_, i) => {
+                        const page = i + 1;
+                        return (
+                            <button
+                                key={page}
+                                onClick={() => fetchReviews(activeSearch, page)}
+                                className={`px-4 py-2 rounded border ${currentPage === page
+                                        ? "bg-orange-500 text-white"
+                                        : "hover:bg-gray-100 dark:hover:bg-neutral-700"
+                                    }`}
+                            >
+                                {page}
+                            </button>
+                        );
+                    })}
+
+                    <button
+                        disabled={currentPage === totalPages}
+                        onClick={() => fetchReviews(activeSearch, currentPage + 1)}
+                        className="px-4 py-2 rounded border disabled:opacity-50"
+                    >
+                        Next
+                    </button>
                 </div>
             )}
         </div>
