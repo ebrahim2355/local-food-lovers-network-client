@@ -30,8 +30,46 @@ export default function ReviewDetails() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex justify-center items-center text-lg font-medium">
-                Loading review details…
+            <div className="min-h-screen max-w-4xl mx-auto p-4 sm:p-6 md:p-10 animate-pulse">
+                {/* Back button placeholder */}
+                <div className="h-5 w-40 bg-gray-200 rounded mb-6" />
+
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    {/* Image skeleton */}
+                    <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-200" />
+
+                    <div className="p-6 sm:p-8 space-y-4">
+                        {/* Title */}
+                        <div className="h-6 w-2/3 bg-gray-200 rounded" />
+
+                        {/* Meta */}
+                        <div className="h-4 w-1/2 bg-gray-200 rounded" />
+
+                        {/* Rating */}
+                        <div className="flex gap-2">
+                            {[...Array(5)].map((_, i) => (
+                                <div key={i} className="h-5 w-5 bg-gray-200 rounded" />
+                            ))}
+                        </div>
+
+                        {/* Description */}
+                        <div className="space-y-2">
+                            <div className="h-4 w-full bg-gray-200 rounded" />
+                            <div className="h-4 w-5/6 bg-gray-200 rounded" />
+                            <div className="h-4 w-2/3 bg-gray-200 rounded" />
+                        </div>
+
+                        {/* Reviewer info */}
+                        <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
+                            <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                            <div className="space-y-2">
+                                <div className="h-4 w-32 bg-gray-200 rounded" />
+                                <div className="h-3 w-40 bg-gray-200 rounded" />
+                            </div>
+                            <div className="ml-auto h-3 w-20 bg-gray-200 rounded" />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

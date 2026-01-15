@@ -56,7 +56,75 @@ export default function MyReviews() {
         });
     };
 
-    if (loading) return <p className="text-center py-10 text-gray-500">Loading your reviews...</p>;
+    if (loading) {
+        return (
+            <div className="min-h-screen max-w-6xl mx-auto p-4 pt-10 pb-20">
+                <h2 className="text-3xl font-bold mb-6 text-center text-orange-500">
+                    My Reviews
+                </h2>
+
+                {/* Desktop Skeleton */}
+                <div className="hidden md:block overflow-x-auto shadow-lg rounded-lg">
+                    <table className="table w-full">
+                        <thead className="dark:bg-gray-500">
+                            <tr>
+                                <th>Food Image</th>
+                                <th>Food Name</th>
+                                <th>Restaurant</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {[...Array(5)].map((_, i) => (
+                                <tr key={i} className="animate-pulse">
+                                    <td>
+                                        <div className="w-16 h-16 bg-gray-200 rounded" />
+                                    </td>
+                                    <td>
+                                        <div className="h-4 w-32 bg-gray-200 rounded" />
+                                    </td>
+                                    <td>
+                                        <div className="h-4 w-28 bg-gray-200 rounded" />
+                                    </td>
+                                    <td>
+                                        <div className="h-4 w-24 bg-gray-200 rounded" />
+                                    </td>
+                                    <td>
+                                        <div className="flex gap-2">
+                                            <div className="h-8 w-16 bg-gray-200 rounded" />
+                                            <div className="h-8 w-16 bg-gray-200 rounded" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Mobile Skeleton */}
+                <div className="md:hidden flex flex-col gap-4">
+                    {[...Array(5)].map((_, i) => (
+                        <div key={i} className="card animate-pulse">
+                            <div className="flex gap-4 p-4 items-center">
+                                <div className="w-20 h-20 bg-gray-200 rounded-lg" />
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-4 w-32 bg-gray-200 rounded" />
+                                    <div className="h-3 w-24 bg-gray-200 rounded" />
+                                    <div className="h-3 w-20 bg-gray-200 rounded" />
+                                </div>
+                            </div>
+                            <div className="flex justify-end p-4 gap-2">
+                                <div className="h-8 w-16 bg-gray-200 rounded" />
+                                <div className="h-8 w-16 bg-gray-200 rounded" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     if (reviews.length === 0)
         return (
             <div className="text-center py-10">

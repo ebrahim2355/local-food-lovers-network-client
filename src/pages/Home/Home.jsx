@@ -69,7 +69,7 @@ export default function Home() {
             <section className="mb-14">
                 <Slider {...settings}>
                     {banners.map((banner) => (
-                        <div key={banner.id} className="relative h-[65vh] max-h-[700px]">
+                        <div key={banner.id} className="relative h-[50vh] max-h-[700px]">
                             <img
                                 src={banner.image}
                                 alt={banner.title}
@@ -103,10 +103,29 @@ export default function Home() {
                 {loading ? (
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {[...Array(6)].map((_, i) => (
-                            <div key={i} className="card h-80 animate-pulse" />
+                            <div key={i} className="card p-4 animate-pulse">
+                                {/* Image */}
+                                <div className="h-48 rounded-lg bg-gray-200 dark:bg-neutral-700 mb-4" />
+
+                                {/* Title */}
+                                <div className="h-4 w-3/4 rounded bg-gray-200 dark:bg-neutral-700 mb-2" />
+
+                                {/* Meta */}
+                                <div className="h-3 w-1/2 rounded bg-gray-200 dark:bg-neutral-700 mb-4" />
+
+                                {/* Description */}
+                                <div className="space-y-2">
+                                    <div className="h-3 w-full rounded bg-gray-200 dark:bg-neutral-700" />
+                                    <div className="h-3 w-5/6 rounded bg-gray-200 dark:bg-neutral-700" />
+                                </div>
+
+                                {/* Button */}
+                                <div className="h-9 w-full rounded bg-gray-200 dark:bg-neutral-700 mt-5" />
+                            </div>
                         ))}
                     </div>
                 ) : featuredReviews.length === 0 ? (
+
                     <p className="text-center text-muted">
                         No featured reviews found.
                     </p>

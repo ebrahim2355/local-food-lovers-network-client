@@ -12,7 +12,9 @@ export default function AllReviews() {
     const fetchReviews = async (searchTerm = "") => {
         setLoading(true);
         try {
-            const res = await axiosSecure.get(`/reviews${searchTerm ? `?search=${searchTerm}` : ""}`);
+            const res = await axiosSecure.get(
+                `/reviews${searchTerm ? `?search=${searchTerm}` : ""}`
+            );
             setReviews(res.data);
         } catch (err) {
             console.error(err);
@@ -28,15 +30,8 @@ export default function AllReviews() {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchReviews(search);
+        fetchReviews(search.trim());
     };
-
-    if (loading)
-        return (
-            <div className="flex justify-center items-center min-h-screen text-xl text-orange-600">
-                Loading reviews...
-            </div>
-        );
 
     return (
         <div className="min-h-screen max-w-7xl mx-auto p-6">
@@ -45,25 +40,49 @@ export default function AllReviews() {
             </h1>
 
             {/* Search Bar */}
-            <form onSubmit={handleSearch} className="flex justify-center mb-6">
+            <form onSubmit={handleSearch} className="flex justify-center mb-8">
                 <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search by food name..."
-                    className="w-full sm:w-1/2 p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full sm:w-1/2 p-3 border rounded-l-lg 
+                        focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <button
                     type="submit"
-                    className="bg-orange-500 hover:bg-orange-600 text-white px-4 rounded-r-lg font-medium cursor-pointer"
+                    className="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-r-lg font-medium"
                 >
                     Search
                 </button>
             </form>
 
-            {reviews.length === 0 ? (
-                <p className="text-center text-gray-500">No reviews found.</p>
-            ) : (
+            {/* Skeleton Loader */}
+            {loading && (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {[...Array(6)].map((_, i) => (
+                        <div key={i} className="card p-4 animate-pulse">
+                            <div className="h-48 rounded-lg bg-gray-200 dark:bg-neutral-700 mb-4" />
+                            <div className="h-4 w-3/4 rounded bg-gray-200 dark:bg-neutral-700 mb-2" />
+                            <div className="h-3 w-1/2 rounded bg-gray-200 dark:bg-neutral-700 mb-4" />
+                            <div className="space-y-2">
+                                <div className="h-3 w-full rounded bg-gray-200 dark:bg-neutral-700" />
+                                <div className="h-3 w-5/6 rounded bg-gray-200 dark:bg-neutral-700" />
+                            </div>
+                            <div className="h-9 w-full rounded bg-gray-200 dark:bg-neutral-700 mt-5" />
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Results */}
+            {!loading && reviews.length === 0 && (
+                <p className="text-center text-gray-500 dark:text-gray-400">
+                    No reviews found.
+                </p>
+            )}
+
+            {!loading && reviews.length > 0 && (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {reviews.map((review) => (
                         <SingleReviewCard key={review._id} review={review} />
