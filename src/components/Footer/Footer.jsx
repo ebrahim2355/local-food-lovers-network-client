@@ -4,55 +4,54 @@ import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6
 
 export default function Footer() {
     return (
-        <footer className="bg-gray-900 border-t border-t-gray-600 text-gray-300">
-            <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                {/* Brand Info */}
+        <footer className="mt-16 border-t border-slate-200 bg-slate-950 text-slate-300 dark:border-slate-800">
+            <div className="app-container grid grid-cols-1 gap-10 py-12 md:grid-cols-3">
                 <div>
-                    <h2 className="text-2xl font-bold text-orange-500 mb-3">
-                        🍴 Local Food Lovers
+                    <h2 className="text-2xl font-bold tracking-tight text-white">
+                        Local Food <span className="text-orange-400">Lovers</span>
                     </h2>
-                    <p className="text-sm leading-relaxed">
-                        A community for food enthusiasts to share local flavors, honest reviews,
-                        and culinary adventures from all over Bangladesh.
+                    <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                        A community where food enthusiasts discover hidden gems, share honest
+                        reviews, and help others find unforgettable local flavors.
                     </p>
                 </div>
 
-                {/* Quick Links */}
                 <div>
-                    <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
-                    <ul className="space-y-2">
-                        <li><Link to="/" className="hover:text-orange-500">Home</Link></li>
-                        <li><Link to="/all-reviews" className="hover:text-orange-500">All Reviews</Link></li>
-                        <li><Link to="/add-review" className="hover:text-orange-500">Add Review</Link></li>
-                        <li><Link to="/my-favorites" className="hover:text-orange-500">My Favorites</Link></li>
-                        <li><Link to="/about" className="hover:text-orange-500">About</Link></li>
+                    <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-200">
+                        Quick Links
+                    </h3>
+                    <ul className="space-y-2 text-sm">
+                        <li><Link to="/" className="hover:text-orange-400">Home</Link></li>
+                        <li><Link to="/all-reviews" className="hover:text-orange-400">All Reviews</Link></li>
+                        <li><Link to="/add-review" className="hover:text-orange-400">Add Review</Link></li>
+                        <li><Link to="/my-favorites" className="hover:text-orange-400">My Favorites</Link></li>
+                        <li><Link to="/my-reviews" className="hover:text-orange-400">My Reviews</Link></li>
                     </ul>
                 </div>
 
-                {/* Social Media */}
                 <div>
-                    <h3 className="text-lg font-semibold text-white mb-3">Follow Us</h3>
-                    <div className="flex items-center gap-4 text-xl">
-                        <a href="https://facebook.com/ebrahim2355" target="_blank" rel="noreferrer" className="hover:text-orange-500">
+                    <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-slate-200">
+                        Follow
+                    </h3>
+                    <div className="flex items-center gap-3 text-lg">
+                        <a href="https://facebook.com/ebrahim2355" target="_blank" rel="noreferrer" className="rounded-full border border-slate-700 p-2 hover:border-orange-400 hover:text-orange-400">
                             <FaFacebookF />
                         </a>
-                        <a href="https://x.com/ebrahim2355" target="_blank" rel="noreferrer" className="hover:text-orange-500">
+                        <a href="https://x.com/ebrahim2355" target="_blank" rel="noreferrer" className="rounded-full border border-slate-700 p-2 hover:border-orange-400 hover:text-orange-400">
                             <FaXTwitter />
                         </a>
-                        <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-orange-500">
+                        <a href="https://instagram.com" target="_blank" rel="noreferrer" className="rounded-full border border-slate-700 p-2 hover:border-orange-400 hover:text-orange-400">
                             <FaInstagram />
                         </a>
-                        <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-orange-500">
+                        <a href="https://youtube.com" target="_blank" rel="noreferrer" className="rounded-full border border-slate-700 p-2 hover:border-orange-400 hover:text-orange-400">
                             <FaYoutube />
                         </a>
                     </div>
                 </div>
             </div>
 
-            {/* Bottom Bar */}
-            <div className="border-t border-gray-700 text-center py-4 text-sm text-gray-400">
-                © {new Date().getFullYear()} Local Food Lovers Network — All Rights Reserved.
+            <div className="border-t border-slate-800 py-4 text-center text-sm text-slate-400">
+                Copyright {new Date().getFullYear()} Local Food Lovers Network. All rights reserved.
             </div>
         </footer>
     );

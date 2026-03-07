@@ -4,53 +4,49 @@ import { motion } from "framer-motion";
 
 export default function ErrorPage() {
     const navigate = useNavigate();
+    const Motion = motion;
 
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center px-4 text-center bg-[rgb(var(--color-bg))]">
-
-            {/* Image */}
-            <motion.div
+        <div className="app-container flex min-h-[70vh] flex-col items-center justify-center py-8 text-center">
+            <Motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="mb-6 max-w-lg w-full"
+                transition={{ duration: 0.7 }}
+                className="w-full max-w-2xl"
             >
                 <img
                     src="https://images.unsplash.com/photo-1633078654544-61b3455b9161?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1045"
                     alt="404 Not Found"
-                    className="w-full rounded-card shadow-lg"
+                    className="h-72 w-full rounded-3xl border border-slate-200 object-cover shadow-xl dark:border-slate-800"
                 />
-            </motion.div>
+            </Motion.div>
 
-            {/* Title */}
-            <motion.h1
-                className="text-4xl sm:text-5xl font-bold text-primary mb-3"
-                initial={{ scale: 0.85 }}
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{ repeat: Infinity, duration: 1.6 }}
+            <Motion.h1
+                className="mt-7 text-5xl font-bold text-orange-500"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ repeat: Infinity, duration: 1.8 }}
             >
-                Oops!
-            </motion.h1>
+                404
+            </Motion.h1>
 
-            {/* Description */}
-            <motion.p
-                className="text-base sm:text-lg opacity-80 mb-8 max-w-md"
+            <Motion.p
+                className="mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-base"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
             >
-                The page you are looking for doesn’t exist or may have been moved.
-            </motion.p>
+                The page you are looking for does not exist or may have been moved.
+            </Motion.p>
 
-            {/* CTA */}
-            <motion.button
+            <Motion.button
                 onClick={() => navigate("/")}
-                className="btn-primary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="btn-primary mt-7"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
             >
                 Back to Home
-            </motion.button>
+            </Motion.button>
         </div>
     );
 }

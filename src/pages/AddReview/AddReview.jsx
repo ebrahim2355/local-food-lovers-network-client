@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { toast } from "react-hot-toast";
@@ -23,8 +23,7 @@ export default function AddReview() {
             review_text: form.review_text.value,
             reviewer_name: user?.displayName || "Anonymous User",
             reviewer_email: user?.email,
-            reviewer_image:
-                user?.photoURL || "https://i.ibb.co/3N1sTkn/user.png",
+            reviewer_image: user?.photoURL || "https://i.ibb.co/3N1sTkn/user.png",
             date: new Date(),
         };
 
@@ -47,50 +46,43 @@ export default function AddReview() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-[rgb(var(--color-bg))]">
-            <div className="card w-full max-w-2xl p-6 sm:p-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">
-                    Add a New Review
-                </h2>
+        <div className="app-container py-10">
+            <div className="mx-auto max-w-3xl card p-6 sm:p-8">
+                <h2 className="section-heading text-center">Add a New Review</h2>
+                <p className="mt-1 text-center text-sm text-muted">Share what you tasted and help the community.</p>
 
-                <form onSubmit={handleAddReview} className="space-y-6">
-                    {/* Food Info */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <form onSubmit={handleAddReview} className="mt-6 space-y-5">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <Input name="food_name" placeholder="Food Name" />
                         <Input name="food_image" placeholder="Food Image URL" />
                     </div>
 
-                    {/* Restaurant Info */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <Input name="restaurant_name" placeholder="Restaurant Name" />
                         <Input name="location" placeholder="Location" />
                     </div>
 
-                    {/* Rating */}
                     <Input
                         name="rating"
                         type="number"
-                        placeholder="Rating (1 – 5)"
+                        placeholder="Rating (1 - 5)"
                         min="1"
                         max="5"
                         step="0.1"
                     />
 
-                    {/* Review */}
                     <textarea
                         name="review_text"
-                        rows="5"
+                        rows="6"
                         required
-                        placeholder="Write your honest review..."
-                        className="w-full p-3 rounded-lg border bg-transparent outline-none
-              border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-primary"
+                        placeholder="Write your honest review"
+                        className="input-field border-slate-300 bg-white dark:border-slate-500 dark:bg-slate-900"
                     />
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="btn-primary w-full disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70"
                     >
                         {loading ? "Submitting..." : "Add Review"}
                     </button>
@@ -100,15 +92,12 @@ export default function AddReview() {
     );
 }
 
-/* Reusable Input */
 function Input({ type = "text", ...props }) {
     return (
         <input
             type={type}
             required
-            className="w-full p-3 rounded-lg border bg-transparent outline-none
-        border-gray-300 dark:border-gray-600
-        focus:ring-2 focus:ring-primary"
+            className="input-field border-slate-300 bg-white dark:border-slate-500 dark:bg-slate-900"
             {...props}
         />
     );

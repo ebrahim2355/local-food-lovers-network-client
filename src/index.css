@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
@@ -8,74 +9,190 @@
   overflow: hidden !important;
 }
 
+.slick-slider {
+    margin-bottom: 0 !important;
+}
 
-/* ================================
-   DESIGN TOKENS (LIGHT MODE)
-================================ */
+.slick-track,
+.slick-slide,
+.slick-slide > div {
+    height: 100%;
+}
+
+.slick-slide {
+    line-height: 0;
+}
+
+.slick-dots {
+    bottom: 12px !important;
+}
+
 :root {
-    --color-primary: 249 115 22;
-    /* orange-500 */
-    --color-secondary: 31 41 55;
-    /* gray-800 */
-    --color-accent: 34 197 94;
-    /* green-500 */
-
-    --color-bg: 249 250 251;
-    /* gray-50 */
+    --color-primary: 234 88 12;
+    --color-primary-soft: 255 237 213;
+    --color-secondary: 17 24 39;
+    --color-accent: 234 179 8;
+    --color-bg: 248 250 252;
     --color-surface: 255 255 255;
-    /* white */
-    --color-text: 31 41 55;
-    /* gray-800 */
-
-    --radius-card: 16px;
+    --color-surface-muted: 255 251 245;
+    --color-border: 226 232 240;
+    --color-text: 30 41 59;
+    --color-text-muted: 100 116 139;
+    --radius-card: 20px;
     --radius-button: 12px;
 }
 
-/* ================================
-   DARK MODE TOKENS
-================================ */
 .dark {
-    --color-bg: 17 24 39;
-    /* gray-900 */
-    --color-surface: 31 41 55;
-    /* gray-800 */
-    --color-text: 229 231 235;
-    /* gray-200 */
+    --color-primary-soft: 90 40 10;
+    --color-bg: 2 6 23;
+    --color-surface: 15 23 42;
+    --color-surface-muted: 30 41 59;
+    --color-border: 51 65 85;
+    --color-text: 226 232 240;
+    --color-text-muted: 148 163 184;
 }
 
-/* ================================
-   GLOBAL BASE STYLES
-================================ */
+* {
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    min-height: 100%;
+}
+
 body {
+    margin: 0;
+    font-family: "Segoe UI", "Poppins", Tahoma, Geneva, Verdana, sans-serif;
     background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-text));
+    background-image:
+        radial-gradient(circle at 12% 2%, rgba(251, 146, 60, 0.16), transparent 22%),
+        radial-gradient(circle at 88% 14%, rgba(244, 63, 94, 0.1), transparent 20%);
+}
+
+a {
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-main {
+    flex: 1;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.section-heading {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: rgb(var(--color-secondary));
+}
+
+.dark .section-heading {
     color: rgb(var(--color-text));
 }
 
-/* ================================
-   REUSABLE UTILITIES
-================================ */
+.text-muted {
+    color: rgb(var(--color-text-muted));
+}
+
 .card {
     background-color: rgb(var(--color-surface));
+    border: 1px solid rgba(var(--color-border), 0.8);
     border-radius: var(--radius-card);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.07);
+}
+
+.card-soft {
+    background-color: rgb(var(--color-surface-muted));
+    border: 1px solid rgba(var(--color-border), 0.85);
+    border-radius: var(--radius-card);
 }
 
 .btn-primary {
-    background-color: rgb(var(--color-primary));
+    background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(249 115 22));
     color: white;
-    padding: 0.75rem 1.25rem;
+    padding: 0.72rem 1.3rem;
     border-radius: var(--radius-button);
     font-weight: 600;
-    transition: background-color 0.2s ease;
+    border: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
+    box-shadow: 0 8px 18px rgba(234, 88, 12, 0.28);
 }
 
 .btn-primary:hover {
-    background-color: rgb(234 88 12);
-    /* orange-600 */
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(234, 88, 12, 0.34);
 }
 
-/* Accessibility */
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--color-primary), 0.1);
+    color: rgb(var(--color-primary));
+    border: 1px solid rgba(var(--color-primary), 0.45);
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--radius-button);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+
+.btn-outline:hover {
+    transform: translateY(-1px);
+    background-color: rgba(var(--color-primary), 0.16);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.1);
+}
+
+.input-field {
+    width: 100%;
+    border-radius: 12px;
+    border: 1.5px solid #94a3b8 !important;
+    background-color: #ffffff !important;
+    color: rgb(var(--color-text));
+    padding: 0.75rem 0.9rem;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.28);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.input-field:focus {
+    border-color: rgb(var(--color-primary)) !important;
+    box-shadow: 0 0 0 3px rgba(var(--color-primary), 0.18);
+}
+
+.dark .input-field {
+    border-color: rgba(100, 116, 139, 0.95) !important;
+    background-color: rgba(15, 23, 42, 0.92) !important;
+    box-shadow: inset 0 0 0 1px rgba(71, 85, 105, 0.55);
+}
+
+.page-hero {
+    background: linear-gradient(145deg, rgba(255, 237, 213, 0.72), rgba(255, 255, 255, 0.92));
+    border: 1px solid rgba(var(--color-border), 0.8);
+    border-radius: 22px;
+}
+
+.dark .page-hero {
+    background: linear-gradient(145deg, rgba(90, 40, 10, 0.4), rgba(15, 23, 42, 0.95));
+}
+
 button:focus-visible {
     outline: 2px solid rgb(var(--color-primary));
     outline-offset: 2px;

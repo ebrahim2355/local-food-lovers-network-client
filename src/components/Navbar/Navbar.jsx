@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router";
 import {
     FaBars,
@@ -18,25 +18,56 @@ export default function Navbar() {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!dropdownRef.current) return;
+            if (!dropdownRef.current.contains(event.target)) {
+                setDropdownOpen(false);
+            }
+        };
+
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                setDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handleEscape);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, []);
 
     const handleLogout = () => {
         logOut().catch(console.error);
     };
 
     const navLinkClass = ({ isActive }) =>
-        `px-3 py-2 rounded-md transition font-medium
-     ${isActive ? "text-primary" : "hover:text-primary"}`;
+        `rounded-full px-4 py-2 text-sm font-semibold transition ${
+            isActive
+                ? "bg-orange-500/15 text-orange-500"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
+        }`;
+
+    const dropdownLinkClass = ({ isActive }) =>
+        `flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition ${
+            isActive
+                ? "bg-orange-100 text-orange-600 dark:bg-slate-800 dark:text-orange-400"
+                : "text-slate-700 hover:bg-orange-50 hover:text-orange-600 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-orange-400"
+        }`;
 
     return (
-        <nav className="sticky top-0 z-50 bg-[rgb(var(--color-surface))] dark:border-gray-700">
-            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                {/* Logo */}
-                <Link to="/" className="text-xl sm:text-2xl font-bold text-primary">
-                    🍴 Local Food Lovers
+        <nav className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/75">
+            <div className="app-container flex items-center justify-between py-3">
+                <Link to="/" className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    Local Food <span className="text-orange-500">Lovers</span>
                 </Link>
 
-                {/* Desktop Nav */}
-                <ul className="hidden md:flex items-center gap-4">
+                <ul className="hidden md:flex items-center gap-2">
                     <li>
                         <NavLink to="/" className={navLinkClass}>
                             Home
@@ -49,65 +80,72 @@ export default function Navbar() {
                     </li>
                 </ul>
 
-                {/* Right Section */}
-                <div className="flex items-center gap-3">
-                    {/* Theme Toggle */}
+                <div className="flex items-center gap-2">
                     <button
                         onClick={toggleTheme}
-                        className="p-2 rounded-full hover:bg-gray-700 dark:hover:bg-gray-800 transition cursor-pointer"
+                        className="rounded-full border border-slate-200 bg-white p-2.5 text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 cursor-pointer"
                         aria-label="Toggle theme"
                     >
-                        {theme === "dark" ? <FiSun title="Switch to Light Mode" /> : <FiMoon title="Switch to Dark Mode"/>}
+                        {theme === "dark" ? <FiSun title="Switch to Light Mode" /> : <FiMoon title="Switch to Dark Mode" />}
                     </button>
 
-                    {/* Auth Section */}
                     {!user ? (
-                        <>
+                        <div className="hidden md:flex items-center gap-2">
                             <Link
                                 to="/login"
-                                className="px-3 py-2 font-medium hover:text-primary"
+                                className="rounded-full px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                             >
                                 Login
                             </Link>
-                            <Link
-                                to="/register"
-                                className="btn-primary"
-                            >
+                            <Link to="/register" className="btn-primary text-sm">
                                 Register
                             </Link>
-                        </>
+                        </div>
                     ) : (
-                        <div className="relative">
-                            <img
-                                src={user.photoURL || "https://i.ibb.co/Z8t0mMC/user1.jpg"}
-                                alt="User"
+                        <div className="relative" ref={dropdownRef}>
+                            <button
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                                className="w-10 h-10 rounded-full cursor-pointer border-2 border-primary"
-                            />
+                                className="cursor-pointer rounded-full border-2 border-orange-500 p-0.5"
+                            >
+                                <img
+                                    src={user.photoURL || "https://i.ibb.co/Z8t0mMC/user1.jpg"}
+                                    alt="User"
+                                    className="h-9 w-9 rounded-full object-cover"
+                                />
+                            </button>
 
                             {dropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-52 card p-2">
-                                    <Link
+                                <div className="absolute right-0 mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white/95 p-2 shadow-2xl backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/95">
+                                    <div className="mb-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white">
+                                        Account Menu
+                                    </div>
+                                    <NavLink
                                         to="/add-review"
-                                        className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className={dropdownLinkClass}
                                     >
                                         <FaPlusCircle /> Add Review
-                                    </Link>
-                                    <Link
+                                    </NavLink>
+                                    <NavLink
                                         to="/my-reviews"
-                                        className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className={dropdownLinkClass}
                                     >
                                         <FaUser /> My Reviews
-                                    </Link>
-                                    <Link
+                                    </NavLink>
+                                    <NavLink
                                         to="/my-favorites"
-                                        className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className={dropdownLinkClass}
                                     >
                                         <FaHeart /> My Favorites
-                                    </Link>
+                                    </NavLink>
                                     <button
-                                        onClick={handleLogout}
-                                        className="flex items-center gap-2 w-full px-3 py-2 rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                        onClick={() => {
+                                            handleLogout();
+                                            setDropdownOpen(false);
+                                        }}
+                                        className="mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-red-500 transition hover:bg-red-50 dark:hover:bg-red-900/20"
                                     >
                                         <FaSignOutAlt /> Logout
                                     </button>
@@ -116,20 +154,18 @@ export default function Navbar() {
                         </div>
                     )}
 
-                    {/* Mobile Toggle */}
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
-                        className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                        className="rounded-xl border border-slate-200 p-2 md:hidden dark:border-slate-700"
                     >
                         {menuOpen ? <FaTimes /> : <FaBars />}
                     </button>
                 </div>
             </div>
 
-            {/* Mobile Menu */}
             {menuOpen && (
-                <div className="md:hidden bg-[rgb(var(--color-surface))] border-t border-gray-200 dark:border-gray-700">
-                    <ul className="flex flex-col items-center gap-3 py-4">
+                <div className="border-t border-slate-200 bg-white/95 md:hidden dark:border-slate-800 dark:bg-slate-950">
+                    <ul className="app-container flex flex-col gap-2 py-4">
                         <NavLink to="/" className={navLinkClass} onClick={() => setMenuOpen(false)}>
                             Home
                         </NavLink>
@@ -140,6 +176,20 @@ export default function Navbar() {
                         >
                             All Reviews
                         </NavLink>
+                        {!user && (
+                            <>
+                                <Link
+                                    to="/login"
+                                    onClick={() => setMenuOpen(false)}
+                                    className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                                >
+                                    Login
+                                </Link>
+                                <Link to="/register" onClick={() => setMenuOpen(false)} className="btn-primary w-fit text-sm">
+                                    Register
+                                </Link>
+                            </>
+                        )}
                     </ul>
                 </div>
             )}

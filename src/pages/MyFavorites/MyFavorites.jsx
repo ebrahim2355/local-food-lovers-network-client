@@ -15,15 +15,21 @@ export default function MyFavorites() {
     useEffect(() => {
         const fetchFavorites = async () => {
             try {
-                const favRes = await axiosSecure.get(`/favorites/${user.email}`);
-                const favData = favRes.data;
+                const [favRes, reviewsRes] = await Promise.all([
+                    axiosSecure.get(`/favorites/${user.email}`),
+                    axiosSecure.get("/reviews"),
+                ]);
 
-                const detailedFavorites = await Promise.all(
-                    favData.map(async (fav) => {
-                        const reviewRes = await axiosSecure.get(`/reviews/${fav.review_id}`);
-                        return { ...fav, review: reviewRes.data };
-                    })
-                );
+                const favData = favRes.data || [];
+                const reviews = reviewsRes.data?.reviews || [];
+                const reviewMap = reviews.reduce((acc, review) => {
+                    acc[review._id] = review;
+                    return acc;
+                }, {});
+
+                const detailedFavorites = favData
+                    .map((fav) => ({ ...fav, review: reviewMap[fav.review_id] }))
+                    .filter((fav) => Boolean(fav.review));
 
                 setFavorites(detailedFavorites);
             } catch (err) {
@@ -44,7 +50,7 @@ export default function MyFavorites() {
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#f97316",
-            cancelButtonColor: "#6b7280",
+            cancelButtonColor: "#64748b",
             confirmButtonText: "Yes, remove",
         }).then(async (result) => {
             if (result.isConfirmed) {
@@ -62,66 +68,11 @@ export default function MyFavorites() {
 
     if (loading) {
         return (
-            <div className="min-h-screen max-w-6xl mx-auto p-4 pt-10 pb-20">
-                <h2 className="text-3xl font-bold mb-6 text-center text-orange-500">
-                    My Reviews
-                </h2>
-
-                {/* Desktop Skeleton */}
-                <div className="hidden md:block overflow-x-auto shadow-lg rounded-lg">
-                    <table className="table w-full">
-                        <thead className="dark:bg-gray-500">
-                            <tr>
-                                <th>Food Image</th>
-                                <th>Food Name</th>
-                                <th>Restaurant</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {[...Array(5)].map((_, i) => (
-                                <tr key={i} className="animate-pulse">
-                                    <td>
-                                        <div className="w-16 h-16 bg-gray-200 rounded" />
-                                    </td>
-                                    <td>
-                                        <div className="h-4 w-32 bg-gray-200 rounded" />
-                                    </td>
-                                    <td>
-                                        <div className="h-4 w-28 bg-gray-200 rounded" />
-                                    </td>
-                                    <td>
-                                        <div className="h-4 w-24 bg-gray-200 rounded" />
-                                    </td>
-                                    <td>
-                                        <div className="flex gap-2">
-                                            <div className="h-8 w-16 bg-gray-200 rounded" />
-                                            <div className="h-8 w-16 bg-gray-200 rounded" />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Mobile Skeleton */}
-                <div className="md:hidden flex flex-col gap-4">
+            <div className="app-container py-10">
+                <div className="mb-6 h-8 w-48 rounded bg-gray-200 dark:bg-slate-700" />
+                <div className="space-y-3">
                     {[...Array(5)].map((_, i) => (
-                        <div key={i} className="card animate-pulse">
-                            <div className="flex gap-4 p-4 items-center">
-                                <div className="w-20 h-20 bg-gray-200 rounded-lg" />
-                                <div className="flex-1 space-y-2">
-                                    <div className="h-4 w-32 bg-gray-200 rounded" />
-                                    <div className="h-3 w-24 bg-gray-200 rounded" />
-                                    <div className="h-3 w-20 bg-gray-200 rounded" />
-                                </div>
-                            </div>
-                            <div className="p-4 gap-2">
-                                <div className="h-8 w-full bg-gray-200 rounded" />
-                            </div>
-                        </div>
+                        <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-200 dark:bg-slate-700" />
                     ))}
                 </div>
             </div>
@@ -130,25 +81,23 @@ export default function MyFavorites() {
 
     if (favorites.length === 0) {
         return (
-            <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
-                <h2 className="text-2xl font-semibold mb-2">No favorites yet</h2>
-                <p className="text-gray-500">
-                    Start adding reviews you love ❤️
-                </p>
+            <div className="app-container py-16 text-center">
+                <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">No favorites yet</h2>
+                <p className="mt-2 text-sm text-muted">Start adding reviews you love.</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen max-w-6xl mx-auto px-4 pt-10 pb-20">
-            <h2 className="text-3xl font-bold text-center text-orange-600 mb-8">
-                My Favorites
-            </h2>
+        <div className="app-container py-8">
+            <div className="mb-6">
+                <h2 className="section-heading">My Favorites</h2>
+                <p className="mt-1 text-sm text-muted">Your saved reviews, ready to revisit anytime.</p>
+            </div>
 
-            {/* Desktop Table */}
-            <div className="hidden md:block overflow-x-auto rounded-xl shadow">
+            <div className="hidden overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm md:block dark:border-slate-800 dark:bg-slate-900">
                 <table className="w-full text-sm">
-                    <thead className=" dark:bg-gray-500">
+                    <thead className="bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-200">
                         <tr>
                             <th className="p-4 text-left">Food</th>
                             <th className="p-4 text-left">Name</th>
@@ -159,37 +108,24 @@ export default function MyFavorites() {
                     </thead>
                     <tbody>
                         {favorites.map((fav) => (
-                            <tr
-                                key={fav._id}
-                                className="border-t dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800"
-                            >
+                            <tr key={fav._id} className="border-t border-slate-100 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/40">
                                 <td className="p-4">
                                     <img
                                         src={fav.review?.food_image}
                                         alt={fav.review?.food_name}
-                                        className="w-16 h-16 rounded-lg object-cover"
+                                        className="h-14 w-14 rounded-lg object-cover"
                                     />
                                 </td>
-                                <td className="p-4 font-medium">
-                                    {fav.review?.food_name}
-                                </td>
-                                <td className="p-4">
-                                    {fav.review?.restaurant_name}
-                                </td>
-                                <td className="p-4">
-                                    {new Date(fav.addedAt).toLocaleDateString()}
-                                </td>
-                                <td className="p-4 space-x-2">
-                                    <button
-                                        onClick={() => navigate(`/review/${fav.
-                                            review_id}`)}
-                                        className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 cursor-pointer"
-                                    >
+                                <td className="p-4 font-medium">{fav.review?.food_name}</td>
+                                <td className="p-4">{fav.review?.restaurant_name}</td>
+                                <td className="p-4">{new Date(fav.addedAt).toLocaleDateString()}</td>
+                                <td className="space-x-2 p-4">
+                                    <button onClick={() => navigate(`/review/${fav.review_id}`)} className="btn-outline py-1.5 text-xs">
                                         View
                                     </button>
                                     <button
                                         onClick={() => handleDelete(fav._id)}
-                                        className="px-3 py-1 rounded-md text-sm bg-red-500 text-white hover:bg-red-600 cursor-pointer"
+                                        className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-600"
                                     >
                                         Delete
                                     </button>
@@ -200,39 +136,29 @@ export default function MyFavorites() {
                 </table>
             </div>
 
-            {/* Mobile Cards */}
-            <div className="md:hidden grid gap-4">
+            <div className="grid gap-4 md:hidden">
                 {favorites.map((fav) => (
                     <div key={fav._id} className="card p-4">
-                        <div onClick={() => navigate(`/review/${fav.
-                            review_id}`)} className="flex gap-4 items-center">
+                        <button onClick={() => navigate(`/review/${fav.review_id}`)} className="flex w-full items-center gap-4 text-left">
                             <img
                                 src={fav.review?.food_image}
                                 alt={fav.review?.food_name}
-                                className="w-20 h-20 rounded-lg object-cover"
+                                className="h-20 w-20 rounded-lg object-cover"
                             />
                             <div className="flex-1">
-                                <h3 className="font-semibold text-lg">
-                                    {fav.review?.food_name}
-                                </h3>
-                                <p className="text-sm text-gray-500">
-                                    {fav.review?.restaurant_name}
-                                </p>
-                                <p className="text-xs text-gray-400">
-                                    {new Date(fav.addedAt).toLocaleDateString()}
-                                </p>
+                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{fav.review?.food_name}</h3>
+                                <p className="text-sm text-muted">{fav.review?.restaurant_name}</p>
+                                <p className="text-xs text-muted">{new Date(fav.addedAt).toLocaleDateString()}</p>
                             </div>
-                        </div>
+                        </button>
 
                         {fav.review?.review_text && (
-                            <p className="mt-3 text-sm text-gray-500 line-clamp-3">
-                                {fav.review.review_text}
-                            </p>
+                            <p className="mt-3 line-clamp-3 text-sm text-muted">{fav.review.review_text}</p>
                         )}
 
                         <button
                             onClick={() => handleDelete(fav._id)}
-                            className="mt-4 w-full py-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
+                            className="mt-4 w-full rounded-lg bg-red-500 py-2 text-sm font-semibold text-white hover:bg-red-600"
                         >
                             Remove Favorite
                         </button>

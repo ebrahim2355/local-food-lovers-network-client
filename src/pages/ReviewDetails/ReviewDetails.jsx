@@ -23,51 +23,20 @@ export default function ReviewDetails() {
                 setLoading(false);
             }
         };
+
         fetchReview();
     }, [id, axiosSecure]);
 
-    /* ------------------ STATES ------------------ */
-
     if (loading) {
         return (
-            <div className="min-h-screen max-w-4xl mx-auto p-4 sm:p-6 md:p-10 animate-pulse">
-                {/* Back button placeholder */}
-                <div className="h-5 w-40 bg-gray-200 rounded mb-6" />
-
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                    {/* Image skeleton */}
-                    <div className="w-full h-64 sm:h-80 md:h-96 bg-gray-200" />
-
-                    <div className="p-6 sm:p-8 space-y-4">
-                        {/* Title */}
-                        <div className="h-6 w-2/3 bg-gray-200 rounded" />
-
-                        {/* Meta */}
-                        <div className="h-4 w-1/2 bg-gray-200 rounded" />
-
-                        {/* Rating */}
-                        <div className="flex gap-2">
-                            {[...Array(5)].map((_, i) => (
-                                <div key={i} className="h-5 w-5 bg-gray-200 rounded" />
-                            ))}
-                        </div>
-
-                        {/* Description */}
-                        <div className="space-y-2">
-                            <div className="h-4 w-full bg-gray-200 rounded" />
-                            <div className="h-4 w-5/6 bg-gray-200 rounded" />
-                            <div className="h-4 w-2/3 bg-gray-200 rounded" />
-                        </div>
-
-                        {/* Reviewer info */}
-                        <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
-                            <div className="w-12 h-12 bg-gray-200 rounded-full" />
-                            <div className="space-y-2">
-                                <div className="h-4 w-32 bg-gray-200 rounded" />
-                                <div className="h-3 w-40 bg-gray-200 rounded" />
-                            </div>
-                            <div className="ml-auto h-3 w-20 bg-gray-200 rounded" />
-                        </div>
+            <div className="app-container animate-pulse py-8">
+                <div className="mb-6 h-5 w-40 rounded bg-gray-200" />
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+                    <div className="h-72 w-full bg-gray-200 dark:bg-slate-700" />
+                    <div className="space-y-4 p-8">
+                        <div className="h-6 w-2/3 rounded bg-gray-200 dark:bg-slate-700" />
+                        <div className="h-4 w-1/2 rounded bg-gray-200 dark:bg-slate-700" />
+                        <div className="h-24 w-full rounded bg-gray-200 dark:bg-slate-700" />
                     </div>
                 </div>
             </div>
@@ -76,86 +45,57 @@ export default function ReviewDetails() {
 
     if (!review) {
         return (
-            <div className="min-h-screen flex justify-center items-center text-gray-500">
+            <div className="app-container flex min-h-[60vh] items-center justify-center text-muted">
                 Review not found.
             </div>
         );
     }
 
-    /* ------------------ STARS ------------------ */
-
     const stars = Array.from({ length: 5 }, (_, i) =>
         i < Math.round(review.rating) ? (
-            <FaStar key={i} className="text-yellow-400" />
+            <FaStar key={i} className="text-amber-400" />
         ) : (
-            <FaRegStar key={i} className="text-gray-400" />
+            <FaRegStar key={i} className="text-slate-300 dark:text-slate-600" />
         )
     );
 
-    /* ------------------ UI ------------------ */
-
     return (
-        <div className="min-h-screen max-w-5xl mx-auto px-4 sm:px-6 py-8">
-            {/* Back Button */}
-            <button
-                onClick={() => navigate(-1)}
-                className="mb-6 text-primary font-semibold hover:underline"
-            >
-                ← Back to Reviews
+        <div className="app-container py-8">
+            <button onClick={() => navigate(-1)} className="mb-5 text-sm font-semibold text-orange-500 hover:text-orange-600">
+                Back to Reviews
             </button>
 
-            {/* Card */}
             <div className="card overflow-hidden">
-                {/* Image */}
                 <img
                     src={review.food_image || "https://i.ibb.co/3N1sTkn/user.png"}
                     alt={review.food_name}
-                    className="w-full h-64 sm:h-80 md:h-96 object-cover"
+                    className="h-72 w-full object-cover sm:h-96"
                 />
 
-                {/* Content */}
-                <div className="p-5 sm:p-8">
-                    {/* Title */}
-                    <h1 className="text-2xl sm:text-3xl font-bold mb-2">
-                        {review.food_name}
-                    </h1>
-
-                    {/* Meta */}
-                    <p className="text-sm opacity-80 mb-3">
-                        {review.restaurant_name} • {review.location}
+                <div className="p-6 sm:p-8">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{review.food_name}</h1>
+                    <p className="mt-2 text-sm text-muted">
+                        {review.restaurant_name} - {review.location}
                     </p>
 
-                    {/* Rating */}
-                    <div className="flex items-center gap-1 mb-5">
+                    <div className="mb-6 mt-3 flex items-center gap-1">
                         {stars}
-                        <span className="ml-2 text-sm opacity-70">
-                            ({review.rating})
-                        </span>
+                        <span className="ml-2 text-sm text-muted">({review.rating})</span>
                     </div>
 
-                    {/* Review Text */}
-                    <p className="leading-relaxed mb-8">
-                        {review.review_text}
-                    </p>
+                    <p className="leading-relaxed text-slate-700 dark:text-slate-200">{review.review_text}</p>
 
-                    {/* Reviewer Info */}
-                    <div className="flex items-center gap-4 border-t border-gray-200 dark:border-gray-700 pt-5">
+                    <div className="mt-8 flex items-center gap-4 border-t border-slate-200 pt-5 dark:border-slate-700">
                         <img
                             src={review.reviewer_image || "https://i.ibb.co/3N1sTkn/user.png"}
                             alt={review.reviewer_name}
-                            className="w-12 h-12 rounded-full object-cover border"
+                            className="h-12 w-12 rounded-full border object-cover"
                         />
                         <div>
-                            <p className="font-semibold">
-                                {review.reviewer_name}
-                            </p>
-                            <p className="text-sm opacity-70">
-                                {review.reviewer_email}
-                            </p>
+                            <p className="font-semibold text-slate-900 dark:text-white">{review.reviewer_name}</p>
+                            <p className="text-sm text-muted">{review.reviewer_email}</p>
                         </div>
-                        <p className="ml-auto text-sm opacity-60">
-                            {new Date(review.date).toLocaleDateString("en-GB")}
-                        </p>
+                        <p className="ml-auto text-sm text-muted">{new Date(review.date).toLocaleDateString("en-GB")}</p>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 
-export default function SingleReviewCard({ review }) {
+export default function SingleReviewCard({ review, favoriteMap }) {
     const {
         _id,
         food_name,
@@ -28,8 +28,20 @@ export default function SingleReviewCard({ review }) {
     const [favoriteId, setFavoriteId] = useState(null);
 
     useEffect(() => {
+        if (!user) {
+            setIsFavorite(false);
+            setFavoriteId(null);
+            return;
+        }
+
+        if (favoriteMap) {
+            const mappedFavoriteId = favoriteMap[_id] || null;
+            setIsFavorite(Boolean(mappedFavoriteId));
+            setFavoriteId(mappedFavoriteId);
+            return;
+        }
+
         const checkFavorite = async () => {
-            if (!user) return;
             try {
                 const res = await axiosSecure.get(`/favorites/${user.email}`);
                 const fav = res.data.find((f) => f.review_id === _id);
@@ -41,8 +53,9 @@ export default function SingleReviewCard({ review }) {
                 console.error(err);
             }
         };
+
         checkFavorite();
-    }, [_id, axiosSecure, user]);
+    }, [_id, axiosSecure, favoriteMap, user]);
 
     const handleFavorite = async () => {
         if (!user) {
@@ -74,83 +87,70 @@ export default function SingleReviewCard({ review }) {
 
     const stars = Array.from({ length: 5 }, (_, i) =>
         i < Math.round(rating) ? (
-            <FaStar key={i} className="text-yellow-400" />
+            <FaStar key={i} className="text-amber-400" />
         ) : (
-            <FaRegStar key={i} className="text-gray-400" />
+            <FaRegStar key={i} className="text-slate-300 dark:text-slate-600" />
         )
     );
 
     return (
-        <div className="card flex flex-col h-full hover:shadow-xl transition-shadow">
-            {/* Image */}
-            <div className="relative">
+        <article className="card group flex h-full flex-col overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-500/10">
+            <div className="relative overflow-hidden">
                 <img
                     src={food_image || "https://i.ibb.co/3N1sTkn/user.png"}
                     alt={food_name}
-                    className="w-full h-48 object-cover rounded-t-card rounded-t-md"
+                    className="h-52 w-full object-cover transition duration-500 group-hover:scale-105"
                 />
 
-                {/* Favorite Button */}
                 <button
                     onClick={handleFavorite}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-white/90 dark:bg-gray-900/80 hover:scale-110 transition"
+                    className="absolute right-3 top-3 rounded-full bg-white/95 p-2.5 shadow-md transition hover:scale-110 dark:bg-slate-900"
                     aria-label="Toggle favorite"
                 >
                     {isFavorite ? (
-                        <FaHeart className="text-red-500 text-xl" />
+                        <FaHeart className="text-xl text-red-500" />
                     ) : (
-                        <FaRegHeart className="text-red-500 text-xl" />
+                        <FaRegHeart className="text-xl text-red-500" />
                     )}
                 </button>
             </div>
 
-            {/* Content */}
-            <div className="p-5 flex flex-col flex-1">
+            <div className="flex flex-1 flex-col p-5">
                 <div className="flex-1">
-                    <h2 className="text-lg font-bold mb-1">
-                        {food_name}
-                    </h2>
-
-                    <p className="text-sm opacity-80 mb-1">
-                        <span className="font-medium">{restaurant_name}</span> • {location}
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white">{food_name}</h2>
+                    <p className="mt-1 text-sm text-muted">
+                        <span className="font-semibold">{restaurant_name}</span> - {location}
                     </p>
 
-                    <div className="flex items-center gap-1 mb-3">
+                    <div className="mb-3 mt-3 flex items-center gap-1">
                         {stars}
-                        <span className="text-xs opacity-70 ml-1">
-                            ({rating})
-                        </span>
+                        <span className="ml-1 text-xs text-muted">({rating})</span>
                     </div>
 
-                    <p className="text-sm leading-relaxed line-clamp-3 min-h-[60px] opacity-90">
+                    <p className="min-h-[60px] text-sm leading-relaxed text-slate-600 line-clamp-3 dark:text-slate-300">
                         {review_text || "No review text provided."}
                     </p>
                 </div>
 
-                {/* Reviewer */}
-                <div className="flex items-center gap-3 mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="mt-5 flex items-center gap-3 border-t border-slate-200 pt-4 dark:border-slate-700">
                     <img
                         src={reviewer_image || "https://i.ibb.co/3N1sTkn/user.png"}
                         alt={reviewer_name}
-                        className="w-10 h-10 rounded-full object-cover border"
+                        className="h-10 w-10 rounded-full border object-cover"
                     />
                     <div className="text-sm">
-                        <p className="font-semibold">{reviewer_name}</p>
-                        <p className="text-xs opacity-70">{reviewer_email}</p>
+                        <p className="font-semibold text-slate-900 dark:text-white">{reviewer_name}</p>
+                        <p className="text-xs text-muted">{reviewer_email}</p>
                     </div>
-                    <p className="ml-auto text-xs opacity-60">
+                    <p className="ml-auto text-xs text-muted">
                         {new Date(date).toLocaleDateString("en-GB")}
                     </p>
                 </div>
 
-                {/* CTA */}
-                <button
-                    onClick={() => navigate(`/review/${_id}`)}
-                    className="btn-primary mt-4 w-full"
-                >
+                <button onClick={() => navigate(`/review/${_id}`)} className="btn-primary mt-4 w-full">
                     View Details
                 </button>
             </div>
-        </div>
+        </article>
     );
 }

@@ -32,6 +32,7 @@ export default function EditReview() {
                 setLoading(false);
             }
         };
+
         fetchReview();
     }, [id, axiosSecure]);
 
@@ -47,7 +48,7 @@ export default function EditReview() {
             const res = await axiosSecure.put(`/reviews/${id}`, review);
             if (res.data.modifiedCount > 0) {
                 toast.success("Review updated successfully");
-                setTimeout(() => navigate("/my-reviews"), 1500);
+                setTimeout(() => navigate("/my-reviews"), 1200);
             } else {
                 toast.error("No changes made");
             }
@@ -61,51 +62,34 @@ export default function EditReview() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center text-muted">
+            <div className="app-container flex min-h-[60vh] items-center justify-center text-muted">
                 Loading review data...
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-[rgb(var(--color-bg))]">
-            <div className="card w-full max-w-3xl p-6 sm:p-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">
-                    Edit Your Review
-                </h2>
+        <div className="app-container py-10">
+            <div className="mx-auto max-w-3xl card p-6 sm:p-8">
+                <h2 className="section-heading text-center">Edit Your Review</h2>
+                <p className="mt-1 text-center text-sm text-muted">Update the details and keep your review fresh.</p>
 
-                <form onSubmit={handleUpdate} className="space-y-6">
-                    <Input
-                        label="Food Name"
-                        name="food_name"
-                        value={review.food_name}
-                        onChange={handleChange}
-                    />
+                <form onSubmit={handleUpdate} className="mt-6 space-y-5">
+                    <Input label="Food Name" name="food_name" value={review.food_name} onChange={handleChange} />
+                    <Input label="Food Image URL" name="food_image" value={review.food_image} onChange={handleChange} />
 
-                    <Input
-                        label="Food Image URL"
-                        name="food_image"
-                        value={review.food_image}
-                        onChange={handleChange}
-                    />
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <Input
                             label="Restaurant Name"
                             name="restaurant_name"
                             value={review.restaurant_name}
                             onChange={handleChange}
                         />
-                        <Input
-                            label="Location"
-                            name="location"
-                            value={review.location}
-                            onChange={handleChange}
-                        />
+                        <Input label="Location" name="location" value={review.location} onChange={handleChange} />
                     </div>
 
                     <Input
-                        label="Rating (1 – 5)"
+                        label="Rating (1 - 5)"
                         name="rating"
                         type="number"
                         min="1"
@@ -116,25 +100,21 @@ export default function EditReview() {
                     />
 
                     <div>
-                        <label className="block mb-1 text-sm font-medium text-muted">
-                            Review Description
-                        </label>
+                        <label className="mb-1 block text-sm font-medium text-muted">Review Description</label>
                         <textarea
                             name="review_text"
                             value={review.review_text}
                             onChange={handleChange}
-                            rows="5"
+                            rows="6"
                             required
-                            className="w-full p-3 rounded-lg border bg-transparent outline-none
-                border-gray-300 dark:border-gray-600
-                focus:ring-2 focus:ring-primary"
+                            className="input-field border-slate-300 bg-white dark:border-slate-500 dark:bg-slate-900"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={updating}
-                        className="btn-primary w-full disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70"
                     >
                         {updating ? "Updating..." : "Update Review"}
                     </button>
@@ -144,19 +124,14 @@ export default function EditReview() {
     );
 }
 
-/* Reusable Input */
 function Input({ label, type = "text", ...props }) {
     return (
         <div>
-            <label className="block mb-1 text-sm font-medium text-muted">
-                {label}
-            </label>
+            <label className="mb-1 block text-sm font-medium text-muted">{label}</label>
             <input
                 type={type}
                 required
-                className="w-full p-3 rounded-lg border bg-transparent outline-none
-          border-gray-300 dark:border-gray-600
-          focus:ring-2 focus:ring-primary"
+                className="input-field border-slate-300 bg-white dark:border-slate-500 dark:bg-slate-900"
                 {...props}
             />
         </div>

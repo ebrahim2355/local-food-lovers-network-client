@@ -3,9 +3,13 @@ import useAuth from "./useAuth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://local-food-lovers-network-server.vercel.app";
+
 const instance = axios.create({
-    baseURL: 'https://local-food-lovers-network-server.vercel.app'
-})
+    baseURL: API_BASE_URL,
+});
 
 const useAxiosSecure = () => {
     const { user, logOut } = useAuth();
@@ -15,13 +19,13 @@ const useAxiosSecure = () => {
     useEffect(() => {
         const requestInterceptor = instance.interceptors.request.use(async (config) => {
             if (user) {
-                const token = await user.accessToken;
+                const token = await user.getIdToken();
                 if (token) {
-                    config.headers.authorization = `Bearer ${token}`
+                    config.headers.authorization = `Bearer ${token}`;
                 }
             }
             return config;
-        })
+        });
 
         // response interceptor
         const responseInterceptor = instance.interceptors.response.use(res => {
@@ -33,18 +37,18 @@ const useAxiosSecure = () => {
                 await logOut()
                     .then(() => {
                         //navigate user to the login page
-                        navigate("/login")
-                    })
+                        navigate("/login");
+                    });
             }
             return Promise.reject(err);
-        })
+        });
 
         return (() => {
             instance.interceptors.request.eject(requestInterceptor);
             instance.interceptors.response.eject(responseInterceptor);
-        })
+        });
 
-    }, [user, navigate, logOut])
+    }, [user, navigate, logOut]);
 
     return instance;
 };
